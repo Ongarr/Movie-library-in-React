@@ -1,23 +1,31 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import api from './movie';
+import api from './fetchMovie';
 
 const apiRequest = new api();
 
-const movie = 'bean';
 
+const movie = 'smerfy';
 apiRequest.getMovie(movie)
   .then(data => updateUI(data))
   .catch(err => console.log(err))
 
   const updateUI = (data) => {
-    const { results, total_results, total_pages } = data;
+    const { results, total_results: totalResults, total_pages: totalPages } = data;
+    console.log('Total results: ', totalResults);
+    console.log('Pages of results:', totalPages);
 
-    console.log(results)
-    console.log(total_results)
-    console.log(total_pages)
+
+    results.forEach(result => {
+      
+      const imageUrl = `https://image.tmdb.org/t/p/w185${result.poster_path}`;
+      console.log(result.title, imageUrl)
+       
+    });
   }
+
+
 
 
 function App() {

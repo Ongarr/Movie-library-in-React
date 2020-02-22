@@ -9,4 +9,5 @@ export default class Movie {
         const data = await response.json(); 
         return data;
     }
+    
 }
