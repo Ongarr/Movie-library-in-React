@@ -1,52 +1,64 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
 import './App.css';
-import api from './fetchMovie';
-
-const apiRequest = new api();
-
-
-const movie = 'smerfy';
-apiRequest.getMovie(movie)
-  .then(data => updateUI(data))
-  .catch(err => console.log(err))
-
-  const updateUI = (data) => {
-    const { results, total_results: totalResults, total_pages: totalPages } = data;
-    console.log('Total results: ', totalResults);
-    console.log('Pages of results:', totalPages);
+import MovieTile from './MovieTile/MovieTile';
+import SearchForm from './SearchForm/SearchForm';
+import getMovie from './fetchMovie';
+import Pagination from './Pagination/Pagination';
+import './MovieTile/Movietile.css'
+import './Pagination/Pagination.css'
 
 
-    results.forEach(result => {
-      
-      const imageUrl = `https://image.tmdb.org/t/p/w185${result.poster_path}`;
-      console.log(result.title, imageUrl)
-       
-    });
+
+
+class App extends Component {
+    
+  state = {
+    movies: [
+    
+    ],
+    pages: ['1']
+  }
+  
+  movieQuery = (event, pageSwitcher = 2) => {
+    getMovie(event.target.value, pageSwitcher)
+      .then(data => this.setState({ movies: data.results, pages: data.total_pages }))
+      .catch(err => console.log(err))
   }
 
+  pageSwitcher = (e) => {
+    return e.target.innerHTML;
+  }
+
+  render() {
+
+    let pageArr = [];
+    for(let i=1; i <= this.state.pages; i++) {
+      pageArr.push(<Pagination pagenumber={ i } switchpage={this.pageSwitcher}/>)
+    }
+    
+
+    const moviesArr = [...this.state.movies].map(movie => {
+      return <MovieTile  title={ movie.title } imgpath={`https://image.tmdb.org/t/p/w154/${movie.poster_path}`} />
+    })
 
 
-
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+      <div className="App">
+        <header className="App-header">
+          <h1>MovieDubie</h1>
+          <SearchForm changed={ this.movieQuery } />
+        </header>
+        <div className="movies-wrapper">
+          <section className="movie-listing">
+            {moviesArr}
+          </section>
+          <section className="paginations">
+            {pageArr}
+          </section>
+        </div>
+      </div>
+    );
+  }
 }
 
 export default App;

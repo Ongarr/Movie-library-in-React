@@ -15,24 +15,74 @@
 
 .App-header {
   background-color: #282c34;
-  min-height: 100vh;
+  min-height: 10vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  padding: 20px;
 }
 
-.App-link {
-  color: #61dafb;
+.movies-wrapper {
+ display:block;
+
+ margin: auto;
+ position: relative;
+ 
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+@media (min-width: 870px) {
+  .movies-wrapper {
+    display:block;
+   
+    margin: auto;
+    position: relative;
+    
+   }
+}
+
+.movie-listing {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 50%);
+  justify-items: center;
+  padding: 50px 20px;
+  grid-row-gap: 20px;
+  background-color: white;
+}
+
+section.paginations {
+  display: flex;
+  
+  width: 100%;
+  justify-content: flex-end;
+}
+
+@media (min-width: 500px) {
+  .movie-listing {
+    grid-template-columns: repeat(auto-fit, 33%);
   }
-  to {
-    transform: rotate(360deg);
+}
+
+
+@media (min-width: 700px) {
+  .movie-listing {
+    grid-template-columns: repeat(auto-fit, 25%);
+  }
+}
+
+
+@media (min-width: 870px) {
+  .movie-listing {
+    grid-template-columns: repeat(auto-fit, 20%);
+  }
+}
+
+
+
+@media (min-width: 1600px) {
+  .movie-listing {
+    grid-template-columns: repeat(auto-fit, 10%);
   }
 }
