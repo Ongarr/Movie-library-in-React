@@ -1,5 +1,25 @@
+:root {
+  --bgmain: ;
+}
+
+html {
+  background: #0F2027;
+  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to left, #2C5364, #203A43, #0F2027);
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to left, #2C5364, #203A43, #0F2027);
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
 .App {
   text-align: center;
+  background: #0F2027;
+  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to left, #2C5364, #203A43, #0F2027);
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to left, #2C5364, #203A43, #0F2027);
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
 }
 
 .App-logo {
@@ -26,56 +46,60 @@
 }
 
 .movies-wrapper {
- display:block;
+  display: block;
+  margin: auto;
+  position: relative;
+  max-width: 1200px;
+  background: transparent;
 
- margin: auto;
- position: relative;
- 
+
+
 }
 
 @media (min-width: 870px) {
   .movies-wrapper {
-    display:block;
-   
+    display: block;
     margin: auto;
     position: relative;
-    
-   }
+
+  }
 }
 
 .movie-listing {
   display: grid;
-  grid-template-columns: repeat(auto-fit, 50%);
+  grid-template-columns: repeat(auto-fill, 100%);
   justify-items: center;
   padding: 50px 20px;
   grid-row-gap: 20px;
-  background-color: white;
+  background: transparent;
+
 }
 
 section.paginations {
   display: flex;
-  
-  width: 100%;
-  justify-content: flex-end;
+  flex-wrap: wrap;
+  width: 95%;
+  margin: auto;
+  justify-content: center;
 }
 
 @media (min-width: 500px) {
   .movie-listing {
-    grid-template-columns: repeat(auto-fit, 33%);
+    grid-template-columns: repeat(auto-fill, 33%);
   }
 }
 
 
 @media (min-width: 700px) {
   .movie-listing {
-    grid-template-columns: repeat(auto-fit, 25%);
+    grid-template-columns: repeat(auto-fill, 25%);
   }
 }
 
 
 @media (min-width: 870px) {
   .movie-listing {
-    grid-template-columns: repeat(auto-fit, 20%);
+    grid-template-columns: repeat(auto-fill, 20%);
   }
 }
 
@@ -83,6 +107,6 @@ section.paginations {
 
 @media (min-width: 1600px) {
   .movie-listing {
-    grid-template-columns: repeat(auto-fit, 10%);
+    grid-template-columns: repeat(auto-fill, 20%);
   }
 }
