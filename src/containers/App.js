@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import './App.css';
-import MovieTile from './MovieTile/MovieTile';
-import SearchForm from './SearchForm/SearchForm';
-import Pagination from './Pagination/Pagination';
-import WhichPage from './WhichPage/WhichPage';
-import NoInput from './NoInput/NoInput';
+import MovieTile from '../components/MovieTile/MovieTile';
+import SearchForm from '../components/SearchForm/SearchForm';
+import Pagination from '../components/Pagination/Pagination';
+import WhichPage from '../components/WhichPage/WhichPage';
+import NoInput from '../components/NoInput/NoInput';
 
 
 
@@ -81,15 +81,13 @@ class App extends Component {
       console.log('its fine')
     }
     
-    
-    
     if (this.state.currentQuery === false || this.state.movies === false ) {
       moviesArr.push(<NoInput info={''}></NoInput>)
     }
 
     let pageArr = [];
     for(let i=1; i <= this.state.pages; i++) {
-      pageArr = <Pagination key={ i }pagenumber={ i } switchpage={() => this.getMovie(this.state.currentQuery, i)}/>
+      pageArr.push(<Pagination key={ i }pagenumber={ i } switchpage={() => this.getMovie(this.state.currentQuery, i)}/>)
     }
     
     let pages = [];
