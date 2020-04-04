@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import './App.css';
 import MovieTile from '../components/MovieTile/MovieTile';
 import SearchForm from '../components/SearchForm/SearchForm';
-import Pagination from '../components/Pagination/Pagination';
 import WhichPage from '../components/WhichPage/WhichPage';
 import NoInput from '../components/NoInput/NoInput';
+import ButtonNextPage from '../components/ButtonNextPage/ButtonNextPage';
+import ButtonPrevPage from '../components/ButtonPrevPage/ButtonPrevPage';
 
 
 
@@ -22,10 +23,31 @@ class App extends Component {
     connectionErr: false
   }
 
+  static getDerivedStateFromProps(props, state) {
+    console.log('[App.js] getDerivedStateFromProps', props);
+    return state;
+  }
+
+  // componentWillMount() {
+  //   console.log('[App.js] componentWillMount');
+  // }
+
+  componentDidMount() {
+    console.log('[App.js] componentDidMount');
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log('[App.js] shouldComponentUpdate');
+    return true;
+  }
+
+  componentDidUpdate() {
+    console.log('[App.js] componentDidUpdate');
+  }
   
   getMovie = async (event, page = 1) => {
     
-    const apiCall = async (event, page) => {
+    const apiCall = async (event, page = 1) => {
     this.setState({ currentQuery: event })
     this.setState({ currentPage: page })
     const key = 'ae56d5e33eecc34a48f563c98dd330ad';
@@ -78,38 +100,28 @@ class App extends Component {
       moviesArr = [...this.state.movies].map(movie => {
         return <MovieTile key={ movie.id } title={ movie.title } imgpath={movie.poster_path === null ? 'https://via.placeholder.com/185x278?text=No+poster' :`https://image.tmdb.org/t/p/w185/${movie.poster_path}`} />
       })
-      console.log('its fine')
     }
     
     if (this.state.currentQuery === false || this.state.movies === false ) {
-      moviesArr.push(<NoInput info={''}></NoInput>)
-    }
-
-    let pageArr = [];
-    for(let i=1; i <= this.state.pages; i++) {
-      pageArr.push(<Pagination key={ i }pagenumber={ i } switchpage={() => this.getMovie(this.state.currentQuery, i)}/>)
+      moviesArr = <NoInput info={''}></NoInput>
     }
     
     let pages = [];
     if (this.state.pages !== false) {
-      pages.push(<WhichPage pageuare={`You are on page ${this.state.currentPage} of ${this.state.pages}`}/>)
+      pages.push(<WhichPage key={this.state.currentPage} pageuare={`You are on page ${this.state.currentPage} of ${this.state.pages}`}/>)
     } else {
-      pages.push(<WhichPage pageuare={``}/>)
+      pages.push(<WhichPage key={null} pageuare={``}/>)
     }
 
-    let errorField = [];
+    let errorField;
     if ( this.state.connectionErr === true) {
-      errorField.push(<NoInput info={'connection error, check your network'}></NoInput>)
+      errorField = <NoInput info={'connection error, check your network'}></NoInput>
     } else {
       errorField = <NoInput info={''}></NoInput>
     }
-    
+     
     
   
-    
-
-
-
     return (
       <div className="App">
         <header className="App-header">
@@ -123,7 +135,17 @@ class App extends Component {
             {moviesArr}
           </section>
           <section className="paginations">
-            {pageArr}
+            {pages}
+            
+            { this.state.currentPage > 1 ?
+            <ButtonPrevPage buttonText= {'Prev Page'} prevPage={ () => this.getMovie(this.state.currentQuery, this.state.currentPage - 1) }/>
+            : null
+            }
+            { this.state.pages > 1 ?
+            <ButtonNextPage buttonText= {'Next Page'} nextPage={ () => this.getMovie(this.state.currentQuery, this.state.currentPage + 1) }/>
+            : null
+            }
+            
           </section>
         </div>
       </div>

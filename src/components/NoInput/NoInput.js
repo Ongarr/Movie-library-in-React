@@ -11,7 +11,6 @@ font-weight:bold;
 const NoInput = (props) => {
     return (
         <Perror>{props.info}</Perror>
-
     )
 }
 
