@@ -56,16 +56,7 @@ html {
 
 }
 
-@media (min-width: 870px) {
-  .movies-wrapper {
-    display: block;
-    margin: auto;
-    position: relative;
-
-  }
-}
-
-.movie-listing {
+/* .movie-listing {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(185px, 1fr) ) ;
   justify-items: center;
@@ -74,7 +65,7 @@ html {
   grid-column-gap: 10px;
   background: transparent;
 
-}
+} */
 
 section.paginations {
   display: block;

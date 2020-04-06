@@ -1,6 +1,16 @@
 import React from 'react';
 import styled from 'styled-components'
 
+const MovieList = styled.section`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(185px, 1fr) ) ;
+  justify-items: center;
+  padding: 50px 20px;
+  grid-row-gap: 10px;
+  grid-column-gap: 10px;
+  background: transparent;
+`
+
 const Tile = styled.div`
     width: 185px;
     display: flex;
@@ -11,6 +21,7 @@ const Tile = styled.div`
 const Img = styled.img `
     width: 185px;
     min-height: 278px;
+    max-height: 278px;
 `
 
 const Title = styled.div`
@@ -26,14 +37,21 @@ const P = styled.p `
     padding: 5px 10px;
 `
 
-const movieTile = (props) => {
+const movieTile = ( {movies} ) => {
     return (
-        <Tile className="movie-tile">
-            <Img src={ props.imgpath } alt={props.title}></Img>
-            <Title>
-            <P>{props.title}</P>
-            </Title>
-        </Tile>
+        <MovieList>
+        
+            { movies === false ? null :
+            movies.map((movie) => 
+            <Tile className="movie-tile" key={movie.id}>
+                <Img src={ movie.poster_path === null ? 'https://via.placeholder.com/185x278?text=No+poster' :`https://image.tmdb.org/t/p/w185/${movie.poster_path}` } alt={movie.title}></Img>
+                <Title>
+                <P>{movie.title}</P>
+                </Title>
+            </Tile>
+            )
+            }
+        </MovieList>
     )
 }
 

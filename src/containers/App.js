@@ -22,38 +22,19 @@ class App extends Component {
     inputValue: [],
     connectionErr: false
   }
-
-  static getDerivedStateFromProps(props, state) {
-    console.log('[App.js] getDerivedStateFromProps', props);
-    return state;
-  }
-
-  // componentWillMount() {
-  //   console.log('[App.js] componentWillMount');
-  // }
-
-  componentDidMount() {
-    console.log('[App.js] componentDidMount');
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    console.log('[App.js] shouldComponentUpdate');
-    return true;
-  }
-
-  componentDidUpdate() {
-    console.log('[App.js] componentDidUpdate');
-  }
   
-  getMovie = async (event, page = 1) => {
+  getMovies = (event, page = 1) => {
     
-    const apiCall = async (event, page = 1) => {
     this.setState({ currentQuery: event })
     this.setState({ currentPage: page })
+
+    const apiCall = async (event, page = 1) => {
+    
     const key = 'ae56d5e33eecc34a48f563c98dd330ad';
     const baseUrl = 'https://api.themoviedb.org/3/search/movie?api_key=';
     const movieQuery = `${baseUrl}${key}&language=en-EN&query=${event}&page=${page}&include_adult=false`;
-    this.setState({ isLoading: false });
+    
+    this.setState({ isLoading: true });
     
     if (event !== '') {
     const response = await fetch(movieQuery)
@@ -95,16 +76,6 @@ class App extends Component {
 
   render() {
 
-    let moviesArr = [];
-    if(this.state.movies !== false && this.state.currentQuery !== '') {
-      moviesArr = [...this.state.movies].map(movie => {
-        return <MovieTile key={ movie.id } title={ movie.title } imgpath={movie.poster_path === null ? 'https://via.placeholder.com/185x278?text=No+poster' :`https://image.tmdb.org/t/p/w185/${movie.poster_path}`} />
-      })
-    }
-    
-    if (this.state.currentQuery === false || this.state.movies === false ) {
-      moviesArr = <NoInput info={''}></NoInput>
-    }
     
     let pages = [];
     if (this.state.pages !== false) {
@@ -117,8 +88,11 @@ class App extends Component {
     if ( this.state.connectionErr === true) {
       errorField = <NoInput info={'connection error, check your network'}></NoInput>
     } else {
-      errorField = <NoInput info={''}></NoInput>
+      errorField = <NoInput info={null}></NoInput>
     }
+
+    const notOnPageOne = this.state.currentPage > 1;
+    const notOnFirstPage = this.state.pages > 1;
      
     
   
@@ -126,23 +100,23 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <h1>MovieDubie</h1>
-          <SearchForm changed={ event => this.getMovie(event.target.value) } />
+          <SearchForm changed={ event => this.getMovies(event.target.value) } />
         </header>
         {errorField}
         {pages}
         <div className="movies-wrapper">
-          <section className="movie-listing">
-            {moviesArr}
-          </section>
+          
+            <MovieTile movies={this.state.movies}/>
+          
           <section className="paginations">
             {pages}
             
-            { this.state.currentPage > 1 ?
-            <ButtonPrevPage buttonText= {'Prev Page'} prevPage={ () => this.getMovie(this.state.currentQuery, this.state.currentPage - 1) }/>
+            { notOnPageOne ?
+            <ButtonPrevPage buttonText= {'Prev Page'} prevPage={ () => this.getMovies(this.state.currentQuery, this.state.currentPage - 1) }/>
             : null
             }
-            { this.state.pages > 1 ?
-            <ButtonNextPage buttonText= {'Next Page'} nextPage={ () => this.getMovie(this.state.currentQuery, this.state.currentPage + 1) }/>
+            { notOnFirstPage ?
+            <ButtonNextPage buttonText= {'Next Page'} nextPage={ () => this.getMovies(this.state.currentQuery, this.state.currentPage + 1) }/>
             : null
             }
             
