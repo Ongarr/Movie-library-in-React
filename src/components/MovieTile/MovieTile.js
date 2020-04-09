@@ -40,7 +40,6 @@ const P = styled.p `
 const movieTile = ( {movies} ) => {
     return (
         <MovieList>
-        
             { movies === false ? null :
             movies.map((movie) => 
             <Tile className="movie-tile" key={movie.id}>

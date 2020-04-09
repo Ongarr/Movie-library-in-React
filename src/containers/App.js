@@ -32,7 +32,7 @@ class App extends Component {
     
     const key = 'ae56d5e33eecc34a48f563c98dd330ad';
     const baseUrl = 'https://api.themoviedb.org/3/search/movie?api_key=';
-    const movieQuery = `${baseUrl}${key}&language=en-EN&query=${event}&page=${page}&include_adult=false`;
+    const movieQuery = `${baseUrl}${key}&language=en-EN&query=${event}&page=${page}&include_adult=true`;
     
     this.setState({ isLoading: true });
     
@@ -49,7 +49,8 @@ class App extends Component {
               });
           } else {
             this.setState({
-              connectionErr: false
+              connectionErr: false,
+              isLoading: true
             });
           return data;
           }
@@ -77,12 +78,8 @@ class App extends Component {
   render() {
 
     
-    let pages = [];
-    if (this.state.pages !== false) {
-      pages.push(<WhichPage key={this.state.currentPage} pageuare={`You are on page ${this.state.currentPage} of ${this.state.pages}`}/>)
-    } else {
-      pages.push(<WhichPage key={null} pageuare={``}/>)
-    }
+   
+  
 
     let errorField;
     if ( this.state.connectionErr === true) {
@@ -93,7 +90,8 @@ class App extends Component {
 
     const notOnPageOne = this.state.currentPage > 1;
     const notOnFirstPage = this.state.pages > 1;
-     
+    
+    const currentPageInfo = this.state.pages ? <WhichPage key={this.state.currentPage} pageuare={`You are on page ${this.state.currentPage} of ${this.state.pages}`}/> : null
     
   
     return (
@@ -103,13 +101,13 @@ class App extends Component {
           <SearchForm changed={ event => this.getMovies(event.target.value) } />
         </header>
         {errorField}
-        {pages}
+        {currentPageInfo}
         <div className="movies-wrapper">
           
             <MovieTile movies={this.state.movies}/>
           
           <section className="paginations">
-            {pages}
+            {currentPageInfo}
             
             { notOnPageOne ?
             <ButtonPrevPage buttonText= {'Prev Page'} prevPage={ () => this.getMovies(this.state.currentQuery, this.state.currentPage - 1) }/>
