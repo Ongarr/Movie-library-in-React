@@ -1,120 +1,74 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import MovieTile from '../components/MovieTile/MovieTile';
 import SearchForm from '../components/SearchForm/SearchForm';
 import WhichPage from '../components/WhichPage/WhichPage';
-import NoInput from '../components/NoInput/NoInput';
 import ButtonNextPage from '../components/ButtonNextPage/ButtonNextPage';
 import ButtonPrevPage from '../components/ButtonPrevPage/ButtonPrevPage';
 
 
 
 
-class App extends Component {
-    
-  state = {
-    movies: false,
-    pages: false,
-    currentQuery: '',
-    currentPage: [],
-    ids: [],
-    isLoading: false,
-    inputValue: [],
-    connectionErr: false
-  }
-  
-  getMovies = (event, page = 1) => {
-    
-    this.setState({ currentQuery: event })
-    this.setState({ currentPage: page })
+function App() {
+    const [movies, setMovies] = useState(false);
+    const [pages, setPages] = useState(false)
+    const [currentQuery, setCurrentQuery] = useState('star wars')
+    const [currentPage, setCurrentPage] = useState(1)
 
-    const apiCall = async (event, page = 1) => {
-    
     const key = 'ae56d5e33eecc34a48f563c98dd330ad';
-    const baseUrl = 'https://api.themoviedb.org/3/search/movie?api_key=';
-    const movieQuery = `${baseUrl}${key}&language=en-EN&query=${event}&page=${page}&include_adult=true`;
-    
-    this.setState({ isLoading: true });
-    
-    if (event !== '') {
-    const response = await fetch(movieQuery)
-      .then(data =>  {
-          if (!data.ok) {
-              console.log('NOOOO', data.status);
-              this.setState({
-                movies: false,
-                pages: false,
-                currentQuery: false,
-                connectionErr: true
-              });
-          } else {
-            this.setState({
-              connectionErr: false,
-              isLoading: true
-            });
-          return data;
-          }
-      })
-      .catch(err => {console.log('nope', err); this.setState({connectionErr: true})})
-    const data = await response.json();
-    console.log(data)
-    return data;
-    } else {
-      this.setState({
-        pages: false,
-        movies: false
-      })
-    }
-  }
 
-    apiCall(event, page)
-      .then(data => this.setState({movies: data.results, pages: data.total_pages}))
-      .catch(err => console.log(err))
-
-  }
-
-
-
-  render() {
+    useEffect(() => {
+      if (currentQuery !== '') {
+      fetch(`https://api.themoviedb.org/3/search/movie?api_key=${key}&language=en-EN&query=${currentQuery}&page=${currentPage}&include_adult=true`)
+        .then(res => res.json())
+        .then(data => {
+          setMovies(data.results)
+          setPages(data.total_pages)
+        })
+        .catch(err => console.log(err))
+      } else {
+        return;
+      }
+    }, [currentQuery, currentPage]);
 
     
-   
-  
 
-    let errorField;
-    if ( this.state.connectionErr === true) {
-      errorField = <NoInput info={'connection error, check your network'}></NoInput>
-    } else {
-      errorField = <NoInput info={null}></NoInput>
-    }
+    const prevPage = () => {
+      setCurrentPage(currentPage - 1)
+    };
 
-    const notOnPageOne = this.state.currentPage > 1;
-    const notOnFirstPage = this.state.pages > 1;
+    const nextPage = () => {
+      setCurrentPage(currentPage + 1)
+    };
+
+    const notOnPageOne = currentPage > 1;
+    const notOnFirstPage = pages >= 1 && currentPage !== pages;
     
-    const currentPageInfo = this.state.pages ? <WhichPage key={this.state.currentPage} pageuare={`You are on page ${this.state.currentPage} of ${this.state.pages}`}/> : null
+    const currentPageInfo = pages ? <WhichPage key={currentPage} pageuare={`You are on page ${currentPage} of ${pages}`}/> : null
     
   
     return (
       <div className="App">
         <header className="App-header">
           <h1>MovieDubie</h1>
-          <SearchForm changed={ event => this.getMovies(event.target.value) } />
+          <SearchForm changed={ event => setCurrentQuery(event.target.value)} />
         </header>
-        {errorField}
+
         {currentPageInfo}
         <div className="movies-wrapper">
-          
-            <MovieTile movies={this.state.movies}/>
-          
+            
+            { movies === false ? null :
+            <MovieTile movies={movies}/>
+            }
           <section className="paginations">
             {currentPageInfo}
             
             { notOnPageOne ?
-            <ButtonPrevPage buttonText= {'Prev Page'} prevPage={ () => this.getMovies(this.state.currentQuery, this.state.currentPage - 1) }/>
+            <ButtonPrevPage buttonText= {'Prev Page'} prevPage={ prevPage }/>
             : null
             }
             { notOnFirstPage ?
-            <ButtonNextPage buttonText= {'Next Page'} nextPage={ () => this.getMovies(this.state.currentQuery, this.state.currentPage + 1) }/>
+            <ButtonNextPage buttonText= {'Next Page'} nextPage={ nextPage }/>
             : null
             }
             
@@ -122,7 +76,7 @@ class App extends Component {
         </div>
       </div>
     );
-  }
-}
+          }
+
 
 export default App;
