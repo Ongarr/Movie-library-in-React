@@ -8,20 +8,19 @@ const Button = styled.button`
     border: 0px solid;
     cursor: pointer;
     color: black;
-    margin-right: 30px;
-
-    &:hover {
+    
+     &:hover {
         background: black;
         color: white;
     }
 `
 
-const ButtonPrevPage = (props) => {
+const ButtonPageControl = (props) => {
     return (
-        <Button onClick={props.prevPage} >
+        <Button onClick={props.pageSwitcher} >
             { props.buttonText }
         </Button>
     )
 }
 
-export default ButtonPrevPage;
+export default ButtonPageControl;

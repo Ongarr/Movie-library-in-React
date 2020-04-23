@@ -3,35 +3,40 @@ import './App.css';
 import MovieTile from '../components/MovieTile/MovieTile';
 import SearchForm from '../components/SearchForm/SearchForm';
 import WhichPage from '../components/WhichPage/WhichPage';
-import ButtonNextPage from '../components/ButtonNextPage/ButtonNextPage';
-import ButtonPrevPage from '../components/ButtonPrevPage/ButtonPrevPage';
+import ButtonPageControl from '../components/ButtonPageControl/ButtonPageControl';
+
 
 
 
 
 function App() {
     const [movies, setMovies] = useState(false);
-    const [pages, setPages] = useState(false)
-    const [currentQuery, setCurrentQuery] = useState('star wars')
-    const [currentPage, setCurrentPage] = useState(1)
+    const [pages, setPages] = useState(false);
+    const [currentQuery, setCurrentQuery] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [isLoading, setIsLoading] = useState(false);
+    const [connectionError, setConnectionError] = useState(false);
 
     const key = 'ae56d5e33eecc34a48f563c98dd330ad';
 
     useEffect(() => {
       if (currentQuery !== '') {
-      fetch(`https://api.themoviedb.org/3/search/movie?api_key=${key}&language=en-EN&query=${currentQuery}&page=${currentPage}&include_adult=true`)
+        setIsLoading(true)
+      fetch(`https://api.themoviedb.org/3/search/movie?api_key=${key}&language=en-EN&query=${currentQuery}&page=${currentPage}&include_adult=false`)
         .then(res => res.json())
         .then(data => {
           setMovies(data.results)
           setPages(data.total_pages)
+          setIsLoading(false)
         })
-        .catch(err => console.log(err))
+        .catch(err => setConnectionError(err))
       } else {
-        return;
+        setMovies(false)
+        setPages(false)
       }
     }, [currentQuery, currentPage]);
 
-    
+
 
     const prevPage = () => {
       setCurrentPage(currentPage - 1)
@@ -41,10 +46,10 @@ function App() {
       setCurrentPage(currentPage + 1)
     };
 
-    const notOnPageOne = currentPage > 1;
-    const notOnFirstPage = pages >= 1 && currentPage !== pages;
+    const notOnPageOne = currentPage > 1 && !isLoading;
+    const notOnFirstPage = pages >= 1 && currentPage !== pages && !isLoading;
     
-    const currentPageInfo = pages ? <WhichPage key={currentPage} pageuare={`You are on page ${currentPage} of ${pages}`}/> : null
+    const currentPageInfo = pages && !isLoading ? <WhichPage key={currentPage} pageuare={`You are on page ${currentPage} of ${pages}`}/> : null;
     
   
     return (
@@ -56,27 +61,37 @@ function App() {
 
         {currentPageInfo}
         <div className="movies-wrapper">
-            
-            { movies === false ? null :
-            <MovieTile movies={movies}/>
+
+            {
+            connectionError ? <h1 style={{color: "white"}}>Connection Error</h1> : null
             }
+
+            {
+            !isLoading && movies.length === 0 && <h1 style={{color: "white"}}>Sorry, there is no such movie in database</h1> 
+            }
+
+            { !isLoading ?
+            <MovieTile movies={movies}/>
+            : <div className="loader">Loading...</div>
+            }
+
           <section className="paginations">
             {currentPageInfo}
-            
-            { notOnPageOne ?
-            <ButtonPrevPage buttonText= {'Prev Page'} prevPage={ prevPage }/>
-            : null
-            }
-            { notOnFirstPage ?
-            <ButtonNextPage buttonText= {'Next Page'} nextPage={ nextPage }/>
-            : null
-            }
-            
+            <div className="pag-buttons">
+              { notOnPageOne ?
+              <ButtonPageControl buttonText= {'Prev Page'} pageSwitcher={ prevPage }/>
+              : null
+              }
+              { notOnFirstPage ?
+              <ButtonPageControl buttonText= {'Next Page'} pageSwitcher={ nextPage }/>
+              : null
+              }
+            </div>
           </section>
         </div>
       </div>
     );
-          }
+}
 
 
 export default App;
