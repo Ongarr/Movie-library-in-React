@@ -24,33 +24,7 @@ background: #000;
 const MovieTilePoster = ({oneMovie}) => {
 
     const [Loading, setLoading] = useState(true);
-    // const [PosterUrl, setPosterUrl] = useState(null);
 
-
-    // useEffect(() => {
-    //     let mounted = true;
-
-    //     const poster = async() => {
-        
-    //         if (oneMovie.poster_path === null) {
-    //             setPosterUrl(noPosterImg)
-    //             setIsLoading(false)
-    //         } else {
-    //         await fetch (`https://image.tmdb.org/t/p/w185${oneMovie.poster_path}`)
-    //                 .then(res => {if(mounted){ res.blob(); setIsLoading(false); setPosterUrl(res.url);}})
-    //                 .catch(err => console.log(err))
-    //         }
-    //     }    
-    //     poster()
-    //     return() => {
-    //         mounted = false;
-    //     }
-    // })
-
-  
-    
-
-  
 
     return (
         <div>

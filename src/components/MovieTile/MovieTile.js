@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import MovieTilePoster from './MovieTilePoster/MovieTilePoster';
+import {Link} from 'react-router-dom';
 
 const MovieList = styled.section`
   display: grid;
@@ -43,7 +44,9 @@ const movieTile = ( {movies} ) => {
             <Tile className="movie-tile" key={movie.id}>
                 <MovieTilePoster oneMovie={movie}></MovieTilePoster>
                 <Title>
-                <P>{movie.title}</P>
+                    <Link to={`/movie/${movie.id}`}>
+                        <P>{movie.title}</P>
+                    </Link>
                 </Title>
             </Tile>
             )

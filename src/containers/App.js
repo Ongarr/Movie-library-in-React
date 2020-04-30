@@ -4,6 +4,9 @@ import MovieTile from '../components/MovieTile/MovieTile';
 import SearchForm from '../components/SearchForm/SearchForm';
 import WhichPage from '../components/WhichPage/WhichPage';
 import ButtonPageControl from '../components/ButtonPageControl/ButtonPageControl';
+import MovieDetail from '../components/MovieDetail/MovieDetail';
+
+import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 
 
 
@@ -54,41 +57,49 @@ function App() {
   
     return (
       <div className="App">
-        <header className="App-header">
-          <h1>MovieDubie</h1>
-          <SearchForm changed={ event => setCurrentQuery(event.target.value)} />
-        </header>
+        <Router>
+          
+          <Switch>
+            <Route path="/" exact>
+            <header className="App-header">
+            <h1>MovieDubie</h1>
+            <SearchForm changed={ event => setCurrentQuery(event.target.value)} />
+          </header>
+            
+          {currentPageInfo}
+          <div className="movies-wrapper">
 
-        {currentPageInfo}
-        <div className="movies-wrapper">
-
-            {
-            connectionError ? <h1 style={{color: "white"}}>Connection Error</h1> : null
-            }
-
-            {
-            !isLoading && movies.length === 0 && <h1 style={{color: "white"}}>Sorry, there is no such movie in database</h1> 
-            }
-
-            { !isLoading ?
-            <MovieTile movies={movies}/>
-            : <div className="loader">Loading...</div>
-            }
-
-          <section className="paginations">
-            {currentPageInfo}
-            <div className="pag-buttons">
-              { notOnPageOne ?
-              <ButtonPageControl buttonText= {'Prev Page'} pageSwitcher={ prevPage }/>
-              : null
+              {
+              connectionError ? <h1 style={{color: "white"}}>Connection Error</h1> : null
               }
-              { notOnFirstPage ?
-              <ButtonPageControl buttonText= {'Next Page'} pageSwitcher={ nextPage }/>
-              : null
+
+              {
+              !isLoading && movies.length === 0 && <h1 style={{color: "white"}}>Sorry, there is no such movie in database</h1> 
               }
-            </div>
-          </section>
-        </div>
+
+              { !isLoading ?
+              <MovieTile movies={movies}/>
+              : <div className="loader">Loading...</div>
+              }
+
+            <section className="paginations">
+              {currentPageInfo}
+              <div className="pag-buttons">
+                { notOnPageOne ?
+                <ButtonPageControl buttonText= {'Prev Page'} pageSwitcher={ prevPage }/>
+                : null
+                }
+                { notOnFirstPage ?
+                <ButtonPageControl buttonText= {'Next Page'} pageSwitcher={ nextPage }/>
+                : null
+                }
+              </div>
+            </section>
+          </div>
+          </Route>
+            <Route path="/movie/:id" component={MovieDetail} />
+          </Switch>
+        </Router>
       </div>
     );
 }
