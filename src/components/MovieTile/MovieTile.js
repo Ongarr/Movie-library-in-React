@@ -1,5 +1,7 @@
 import React from 'react';
-import styled from 'styled-components'
+import styled from 'styled-components';
+import MovieTilePoster from './MovieTilePoster/MovieTilePoster';
+import {Link} from 'react-router-dom';
 
 const MovieList = styled.section`
   display: grid;
@@ -18,11 +20,6 @@ const Tile = styled.div`
     background-color: lightgoldenrodyellow;
 `
 
-const Img = styled.img `
-    width: 185px;
-    min-height: 278px;
-    max-height: 278px;
-`
 
 const Title = styled.div`
     display: flex;
@@ -38,18 +35,22 @@ const P = styled.p `
 `
 
 const movieTile = ( {movies} ) => {
+    
     return (
         <MovieList>
-        
-            { movies === false ? null :
+            { movies ? 
             movies.map((movie) => 
+            
             <Tile className="movie-tile" key={movie.id}>
-                <Img src={ movie.poster_path === null ? 'https://via.placeholder.com/185x278?text=No+poster' :`https://image.tmdb.org/t/p/w185/${movie.poster_path}` } alt={movie.title}></Img>
+                <MovieTilePoster oneMovie={movie}></MovieTilePoster>
                 <Title>
-                <P>{movie.title}</P>
+                    <Link to={`/movie/${movie.id}`}>
+                        <P>{movie.title}</P>
+                    </Link>
                 </Title>
             </Tile>
             )
+            : null
             }
         </MovieList>
     )

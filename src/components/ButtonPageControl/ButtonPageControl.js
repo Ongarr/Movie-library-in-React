@@ -8,19 +8,19 @@ const Button = styled.button`
     border: 0px solid;
     cursor: pointer;
     color: black;
-
-    &:hover {
+    
+     &:hover {
         background: black;
         color: white;
     }
 `
 
-const ButtonNextPage = (props) => {
+const ButtonPageControl = (props) => {
     return (
-        <Button onClick={props.nextPage} >
+        <Button onClick={props.pageSwitcher} >
             { props.buttonText }
         </Button>
     )
 }
 
-export default ButtonNextPage;
+export default ButtonPageControl;

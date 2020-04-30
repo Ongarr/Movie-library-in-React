@@ -1,130 +1,108 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import MovieTile from '../components/MovieTile/MovieTile';
 import SearchForm from '../components/SearchForm/SearchForm';
 import WhichPage from '../components/WhichPage/WhichPage';
-import NoInput from '../components/NoInput/NoInput';
-import ButtonNextPage from '../components/ButtonNextPage/ButtonNextPage';
-import ButtonPrevPage from '../components/ButtonPrevPage/ButtonPrevPage';
+import ButtonPageControl from '../components/ButtonPageControl/ButtonPageControl';
+import MovieDetail from '../components/MovieDetail/MovieDetail';
+
+import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 
 
 
 
-class App extends Component {
-    
-  state = {
-    movies: false,
-    pages: false,
-    currentQuery: '',
-    currentPage: [],
-    ids: [],
-    isLoading: false,
-    inputValue: [],
-    connectionErr: false
-  }
-  
-  getMovies = (event, page = 1) => {
-    
-    this.setState({ currentQuery: event })
-    this.setState({ currentPage: page })
 
-    const apiCall = async (event, page = 1) => {
-    
+function App() {
+    const [movies, setMovies] = useState(false);
+    const [pages, setPages] = useState(false);
+    const [currentQuery, setCurrentQuery] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [isLoading, setIsLoading] = useState(false);
+    const [connectionError, setConnectionError] = useState(false);
+
     const key = 'ae56d5e33eecc34a48f563c98dd330ad';
-    const baseUrl = 'https://api.themoviedb.org/3/search/movie?api_key=';
-    const movieQuery = `${baseUrl}${key}&language=en-EN&query=${event}&page=${page}&include_adult=false`;
+
+    useEffect(() => {
+      if (currentQuery !== '') {
+        setIsLoading(true)
+      fetch(`https://api.themoviedb.org/3/search/movie?api_key=${key}&language=en-EN&query=${currentQuery}&page=${currentPage}&include_adult=false`)
+        .then(res => res.json())
+        .then(data => {
+          setMovies(data.results)
+          setPages(data.total_pages)
+          setIsLoading(false)
+        })
+        .catch(err => setConnectionError(err))
+      } else {
+        setMovies(false)
+        setPages(false)
+      }
+    }, [currentQuery, currentPage]);
+
+
+
+    const prevPage = () => {
+      setCurrentPage(currentPage - 1)
+    };
+
+    const nextPage = () => {
+      setCurrentPage(currentPage + 1)
+    };
+
+    const notOnPageOne = currentPage > 1 && !isLoading;
+    const notOnFirstPage = pages >= 1 && currentPage !== pages && !isLoading;
     
-    this.setState({ isLoading: true });
-    
-    if (event !== '') {
-    const response = await fetch(movieQuery)
-      .then(data =>  {
-          if (!data.ok) {
-              console.log('NOOOO', data.status);
-              this.setState({
-                movies: false,
-                pages: false,
-                currentQuery: false,
-                connectionErr: true
-              });
-          } else {
-            this.setState({
-              connectionErr: false
-            });
-          return data;
-          }
-      })
-      .catch(err => {console.log('nope', err); this.setState({connectionErr: true})})
-    const data = await response.json();
-    console.log(data)
-    return data;
-    } else {
-      this.setState({
-        pages: false,
-        movies: false
-      })
-    }
-  }
-
-    apiCall(event, page)
-      .then(data => this.setState({movies: data.results, pages: data.total_pages}))
-      .catch(err => console.log(err))
-
-  }
-
-
-
-  render() {
-
-    
-    let pages = [];
-    if (this.state.pages !== false) {
-      pages.push(<WhichPage key={this.state.currentPage} pageuare={`You are on page ${this.state.currentPage} of ${this.state.pages}`}/>)
-    } else {
-      pages.push(<WhichPage key={null} pageuare={``}/>)
-    }
-
-    let errorField;
-    if ( this.state.connectionErr === true) {
-      errorField = <NoInput info={'connection error, check your network'}></NoInput>
-    } else {
-      errorField = <NoInput info={null}></NoInput>
-    }
-
-    const notOnPageOne = this.state.currentPage > 1;
-    const notOnFirstPage = this.state.pages > 1;
-     
+    const currentPageInfo = pages && !isLoading ? <WhichPage key={currentPage} pageuare={`You are on page ${currentPage} of ${pages}`}/> : null;
     
   
     return (
       <div className="App">
-        <header className="App-header">
-          <h1>MovieDubie</h1>
-          <SearchForm changed={ event => this.getMovies(event.target.value) } />
-        </header>
-        {errorField}
-        {pages}
-        <div className="movies-wrapper">
+        <Router>
           
-            <MovieTile movies={this.state.movies}/>
-          
-          <section className="paginations">
-            {pages}
+          <Switch>
+            <Route path="/" exact>
+            <header className="App-header">
+            <h1>MovieDubie</h1>
+            <SearchForm changed={ event => setCurrentQuery(event.target.value)} />
+          </header>
             
-            { notOnPageOne ?
-            <ButtonPrevPage buttonText= {'Prev Page'} prevPage={ () => this.getMovies(this.state.currentQuery, this.state.currentPage - 1) }/>
-            : null
-            }
-            { notOnFirstPage ?
-            <ButtonNextPage buttonText= {'Next Page'} nextPage={ () => this.getMovies(this.state.currentQuery, this.state.currentPage + 1) }/>
-            : null
-            }
-            
-          </section>
-        </div>
+          {currentPageInfo}
+          <div className="movies-wrapper">
+
+              {
+              connectionError ? <h1 style={{color: "white"}}>Connection Error</h1> : null
+              }
+
+              {
+              !isLoading && movies.length === 0 && <h1 style={{color: "white"}}>Sorry, there is no such movie in database</h1> 
+              }
+
+              { !isLoading ?
+              <MovieTile movies={movies}/>
+              : <div className="loader">Loading...</div>
+              }
+
+            <section className="paginations">
+              {currentPageInfo}
+              <div className="pag-buttons">
+                { notOnPageOne ?
+                <ButtonPageControl buttonText= {'Prev Page'} pageSwitcher={ prevPage }/>
+                : null
+                }
+                { notOnFirstPage ?
+                <ButtonPageControl buttonText= {'Next Page'} pageSwitcher={ nextPage }/>
+                : null
+                }
+              </div>
+            </section>
+          </div>
+          </Route>
+            <Route path="/movie/:id" component={MovieDetail} />
+          </Switch>
+        </Router>
       </div>
     );
-  }
 }
+
 
 export default App;

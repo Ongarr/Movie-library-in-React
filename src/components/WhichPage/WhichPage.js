@@ -8,7 +8,6 @@ const P = styled.p `
 const whichPage = (props) => {
     return (
         <P className="current-page">{props.pageuare}</P>
-
     )
 }
 
