@@ -33,10 +33,11 @@ function App() {
           setIsLoading(false)
         })
         .catch(err => setConnectionError(err))
-      } else {
+      } 
+        return () => {
         setMovies(false)
         setPages(false)
-      }
+        }
     }, [currentQuery, currentPage]);
 
 
