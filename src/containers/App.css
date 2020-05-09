@@ -62,16 +62,6 @@ html {
     margin: auto;
 }
 
-/* .movie-listing {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(185px, 1fr) ) ;
-  justify-items: center;
-  padding: 50px 20px;
-  grid-row-gap: 10px;
-  grid-column-gap: 10px;
-  background: transparent;
-
-} */
 
 section.paginations {
   display: block;
@@ -81,11 +71,6 @@ section.paginations {
   justify-content: center;
 }
 
-/* @media (min-width: 500px) {
-  .movie-listing {
-    grid-template-columns: repeat(auto-fill, 33%);
-  }
-}
 
 
 @media (min-width: 700px) {

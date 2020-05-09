@@ -1,89 +1,14 @@
+import {apiKey} from '../../apiCall';
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
+
 import {Link} from 'react-router-dom';
 import noPosterImg from '../../assets/no-poster.png';
+import {movieSimplyDetailApi} from '../../apiCall';
+import {movieCastApi} from '../../apiCall';
+import { MovieWrapper, List, Cast, BasicInfo, Button, Overview, Title, Rating } from './MovieDetailStyle'
 
 
 
-const MovieWrapper = styled.div `
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    max-width: 1080px;
-    padding-top: 100px;
-    padding-bottom: 100px;
-    margin: auto;
-    align-items: center;
-    
-    @media (max-width: 768px) {
-    flex-direction: column;
-  }
-    
-`
-
-const Rating = styled.span `
-    color: gold;
-    font-size: 1.5em;
-    font-weight: bold;
-`
-
-const Title = styled.h1 `
-    color: white;
-    display: block;
-    max-width: 80%;
-    margin: auto;
-    margin-top: 50px;
-`
-const Overview = styled.p `
-    color: white;
-    display: block;
-    max-width: 80%;
-    text-align: justify;
-    margin: 25px auto;
-    
-`
-
-const Button = styled.button `
-    padding: 10px 15px;
-    width: 80%;
-`
-const BasicInfo = styled.div `
-    display: flex;
-    justify-content: center;
-    flex-direction: row;
-    
-    align-items: center;
-    
-    @media (max-width: 768px) {
-    flex-direction: column;
-  }
-`
-
-const Cast = styled.div `
-    color: white;
-    
-
-    h2 {
-        font-size:40px;
-    }
-`
-
-const List = styled.div `
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-gap: 20px;
-    
-
-    div {
-        background-color: hsla(109, 100%, 0%, 0.32);
-        padding: 20px;
-        
-    }
-
-    p {
-        margin: 0;
-    }
-`
 
 const MovieDetail = ({ match }) => {
 
@@ -96,34 +21,28 @@ const MovieDetail = ({ match }) => {
     useEffect(() => {
         getMovieDetail();
         getMovieCast();
-
-        console.log(movieCast)
     }, [movieId])
     
 
-    const key = 'ae56d5e33eecc34a48f563c98dd330ad';
+
 
     const getMovieDetail = async () => {
-        const fetchMovieDetail =  await fetch (`https://api.themoviedb.org/3/movie/${match.params.id}?api_key=${key}&language=en-US`)
+        const fetchMovieDetail =  await fetch (movieSimplyDetailApi(movieId, apiKey))
         setMovieInfo(await fetchMovieDetail.json());
-        
     }
 
     const getMovieCast = async () => {
-        const fetchMovieCast = await fetch (`https://api.themoviedb.org/3/movie/${match.params.id}/credits?api_key=${key}`)
+        const fetchMovieCast = await fetch (movieCastApi(movieId, apiKey))
         const {cast} = await fetchMovieCast.json()
         setMovieCast(cast);
     }
 
-    
-    console.log(movieCast)
-
-    
+    const checkForPoster = movieInfo.poster_path === null ? noPosterImg : `https://image.tmdb.org/t/p/w342/${movieInfo.poster_path}`;
 
     return (
         <MovieWrapper>
             <BasicInfo>
-            <div><img src={ movieInfo.poster_path === null ? noPosterImg : `https://image.tmdb.org/t/p/w342/${movieInfo.poster_path}`} alt={movieInfo.title}></img></div>
+            <div><img src={ checkForPoster} alt={movieInfo.title}></img></div>
            <div>
                <Title>{movieInfo.title}</Title>
                <Rating>Rating {movieInfo.vote_average}</Rating>
@@ -149,7 +68,7 @@ const MovieDetail = ({ match }) => {
     )
 }
 
-export default MovieDetail
+export default MovieDetail;
 
 
 

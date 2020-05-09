@@ -1,41 +1,18 @@
 import React, {useState} from 'react';
-import styled from 'styled-components';
 import noPosterImg from '../../../assets/no-poster.png';
+import { Img, Loader } from './MovieTilePosterStyle';
 
-const Img = styled.img `
-    width: 185px;
-    min-height: ${(props) => props.forStyle ? '0px' : '278px'};;
-    max-height: 278px;
-`
-const Loader = styled.div `
-color: #000;
-background: #000;
-    &::after {
-    background: #000;
-    }
-    
-    &::before {
-    background: #000;  
-    }
-`
-
-
-
-const MovieTilePoster = ({oneMovie}) => {
+const MovieTilePoster = ({movie}) => {
 
     const [Loading, setLoading] = useState(true);
 
+    const checkForPoster = movie.poster_path === null ? noPosterImg : `https://image.tmdb.org/t/p/w185${movie.poster_path}`;
 
     return (
         <div>
-        
-        {/* {IsLoading ? <div className="loader">Loading...</div> : <Img src={ PosterUrl } onLoad={setPosterUrl(noPosterImg)}alt={oneMovie.title}/>} */}
-        {Loading ? <Loader className="loader">Loading...</Loader> : null }
-        <Img src={ oneMovie.poster_path === null ? noPosterImg : `https://image.tmdb.org/t/p/w185${oneMovie.poster_path}` } forStyle={Loading} onLoad={() => setLoading(false)} alt={oneMovie.title}/>
+        {Loading ? <Loader className="loader"><p>Loading...</p></Loader> : null }
+        <Img src={ checkForPoster } forStyle={Loading} onLoad={() => setLoading(false)} alt={movie.title}/>
         </div>
-
-
-
     )
 }
 

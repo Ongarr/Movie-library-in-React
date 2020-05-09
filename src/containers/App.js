@@ -5,10 +5,10 @@ import SearchForm from '../components/SearchForm/SearchForm';
 import WhichPage from '../components/WhichPage/WhichPage';
 import ButtonPageControl from '../components/ButtonPageControl/ButtonPageControl';
 import MovieDetail from '../components/MovieDetail/MovieDetail';
+import {apiKey} from '../apiCall';
+import {moviesListingApi} from '../apiCall';
 
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
-
-
 
 
 
@@ -20,12 +20,12 @@ function App() {
     const [isLoading, setIsLoading] = useState(false);
     const [connectionError, setConnectionError] = useState(false);
 
-    const key = 'ae56d5e33eecc34a48f563c98dd330ad';
+    
 
     useEffect(() => {
       if (currentQuery !== '') {
         setIsLoading(true)
-      fetch(`https://api.themoviedb.org/3/search/movie?api_key=${key}&language=en-EN&query=${currentQuery}&page=${currentPage}&include_adult=false`)
+        fetch(moviesListingApi(currentQuery, currentPage, apiKey))
         .then(res => res.json())
         .then(data => {
           setMovies(data.results)
@@ -49,11 +49,11 @@ function App() {
       setCurrentPage(currentPage + 1)
     };
 
-    const notOnPageOne = currentPage > 1 && !isLoading;
-    const notOnFirstPage = pages >= 1 && currentPage !== pages && !isLoading;
+    const testForPrevButton = currentPage > 1 && !isLoading;
+    const testForNextButton = pages >= 1 && currentPage !== pages && !isLoading;
     
-    const currentPageInfo = pages && !isLoading ? <WhichPage key={currentPage} pageuare={`You are on page ${currentPage} of ${pages}`}/> : null;
-    
+    const currentPageInfo = pages && !isLoading ? <WhichPage key={currentPage} pageInfoText={`You are on page ${currentPage} of ${pages}`}/> : null;
+  
   
     return (
       <div className="App">
@@ -85,11 +85,11 @@ function App() {
             <section className="paginations">
               {currentPageInfo}
               <div className="pag-buttons">
-                { notOnPageOne ?
+                { testForPrevButton  ?
                 <ButtonPageControl buttonText= {'Prev Page'} pageSwitcher={ prevPage }/>
                 : null
                 }
-                { notOnFirstPage ?
+                { testForNextButton ?
                 <ButtonPageControl buttonText= {'Next Page'} pageSwitcher={ nextPage }/>
                 : null
                 }
