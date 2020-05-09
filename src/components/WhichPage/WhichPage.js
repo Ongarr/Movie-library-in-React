@@ -1,14 +1,10 @@
 import React from 'react';
-import styled from 'styled-components'
+import { P } from './WhichPageStyle';
 
-const P = styled.p `
-    color: lightgrey;
-`
-
-const whichPage = (props) => {
+const WhichPage = (props) => {
     return (
-        <P className="current-page">{props.pageuare}</P>
+        <P className="current-page">{props.pageInfoText}</P>
     )
 }
 
-export default whichPage;
+export default WhichPage;
