@@ -19,23 +19,26 @@ const MovieDetail = ({ match }) => {
     
 
     useEffect(() => {
+        const getMovieDetail = async () => {
+            const fetchMovieDetail =  await fetch (movieSimplyDetailApi(movieId, apiKey))
+            setMovieInfo(await fetchMovieDetail.json());
+        }
         getMovieDetail();
+
+        const getMovieCast = async () => {
+            const fetchMovieCast = await fetch (movieCastApi(movieId, apiKey))
+            const {cast} = await fetchMovieCast.json()
+            setMovieCast(cast);
+        }
         getMovieCast();
     }, [movieId])
     
 
 
 
-    const getMovieDetail = async () => {
-        const fetchMovieDetail =  await fetch (movieSimplyDetailApi(movieId, apiKey))
-        setMovieInfo(await fetchMovieDetail.json());
-    }
+    
 
-    const getMovieCast = async () => {
-        const fetchMovieCast = await fetch (movieCastApi(movieId, apiKey))
-        const {cast} = await fetchMovieCast.json()
-        setMovieCast(cast);
-    }
+  
 
     const checkForPoster = movieInfo.poster_path === null ? noPosterImg : `https://image.tmdb.org/t/p/w342/${movieInfo.poster_path}`;
 
