@@ -55,8 +55,10 @@ function App() {
   };
 
   useEffect(() => {
+ 
+    resolveTopMovies();
     currentQuery ? resolveMovies() : resolveTopMovies();
-  }, [currentQuery, currentPage, resolveMovies, resolveTopMovies]);
+  }, [currentQuery]);
 
   const prevPage = () => {
     setCurrentPage(currentPage - 1);

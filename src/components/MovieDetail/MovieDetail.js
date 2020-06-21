@@ -31,14 +31,13 @@ const MovieDetail = ({ match }) => {
     return setInWishList(false);
 
   }, [movieInfo.title])
-  
 
-  function saveToWishList() {
-    if (sessionStorage.getItem(movieInfo.title)) {
+  const saveToWishList = useCallback(() => {
+    if ( inWishList===true) {
     return sessionStorage.removeItem(movieInfo.title);
     }
     return sessionStorage.setItem(movieInfo.title, JSON.stringify(movieInfo));
-  }
+  }, [inWishList, movieInfo])
 
   useEffect(() => {
     const getMovieDetail = async () => {
@@ -52,7 +51,7 @@ const MovieDetail = ({ match }) => {
     getMovieDetail();
     getMovieCast();
     checkWishList();
-  }, [movieId, checkWishList]);
+  }, [movieId, checkWishList, saveToWishList]);
 
   const checkForPoster =
     movieInfo.poster_path === null
