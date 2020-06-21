@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const MovieList = styled.section`
   display: grid;
@@ -14,7 +14,7 @@ const Tile = styled.div`
   width: 185px;
   display: flex;
   flex-direction: column;
-  background-color: lightgoldenrodyellow;
+  background-color: black;
 `;
 
 const Title = styled.div`
@@ -28,6 +28,7 @@ const P = styled.p`
   font-size: 16px;
   font-weight: bold;
   padding: 5px 10px;
+  color: white;
 `;
 
 export { MovieList, Tile, Title, P };

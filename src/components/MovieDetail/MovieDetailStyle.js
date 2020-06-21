@@ -40,6 +40,12 @@ const Button = styled.button`
   padding: 10px 15px;
   width: 80%;
 `;
+
+const AddToList = styled.button`
+  padding: 10px 15px;
+  width: 80%;
+`;
+
 const BasicInfo = styled.div`
   display: flex;
   justify-content: center;
@@ -64,13 +70,25 @@ const List = styled.div`
   grid-template-columns: 1fr 1fr 1fr;
   grid-gap: 20px;
 
-  div {
-    background-color: hsla(109, 100%, 0%, 0.32);
-    padding: 20px;
-  }
   p {
     margin: 0;
   }
 `;
 
-export { MovieWrapper, List, Cast, BasicInfo, Button, Overview, Title, Rating };
+const Actor = styled.div`
+  background-color: hsla(109, 100%, 0%, 0.32);
+  padding: 20px;
+`;
+
+export {
+  MovieWrapper,
+  List,
+  Cast,
+  BasicInfo,
+  Button,
+  Overview,
+  Title,
+  Rating,
+  Actor,
+  AddToList,
+};

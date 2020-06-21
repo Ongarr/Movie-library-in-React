@@ -5,36 +5,58 @@ import SearchForm from "../components/SearchForm/SearchForm";
 import WhichPage from "../components/WhichPage/WhichPage";
 import ButtonPageControl from "../components/ButtonPageControl/ButtonPageControl";
 import MovieDetail from "../components/MovieDetail/MovieDetail";
-import { apiKey } from "../apiCall";
-import { moviesListingApi } from "../apiCall";
+import WishListIcon from "../components/WishList/WishListIcon/WishListIcon";
+import WishListPage from "../components/WishList/WishListPage/WishListPage";
+
+import { getMovies, topMovieApi } from "../apiCall";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 function App() {
   const [movies, setMovies] = useState(false);
   const [pages, setPages] = useState(false);
-  const [currentQuery, setCurrentQuery] = useState("");
+  const [currentQuery, setCurrentQuery] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [connectionError, setConnectionError] = useState(false);
+  const [infoMovieListing, setInfoMovieListing] = useState(false);
+
+  const resolvedMovie = async (data) => {
+    setMovies(data.results);
+    setPages(data.total_pages);
+    setInfoMovieListing(false);
+    return setIsLoading(false);
+  };
+
+  const resolvedTopMovie = async (data) => {
+    setMovies(data.results);
+    setPages(data.total_pages);
+    setInfoMovieListing("In Theaters");
+    return setIsLoading(false);
+  };
+
+  const resolveTopMovies = async () => {
+    try {
+      const topMovies = await topMovieApi(currentPage);
+      return resolvedTopMovie(topMovies);
+    } catch (error) {
+      return setConnectionError(true);
+    }
+  };
+
+  const resolveMovies = async () => {
+    setIsLoading(true);
+    try {
+      const movies = await getMovies(currentQuery, currentPage);
+      return resolvedMovie(movies);
+    } catch (error) {
+      return setConnectionError(true);
+    }
+  };
 
   useEffect(() => {
-    if (currentQuery !== "") {
-      setIsLoading(true);
-      fetch(moviesListingApi(currentQuery, currentPage, apiKey))
-        .then((res) => res.json())
-        .then((data) => {
-          setMovies(data.results);
-          setPages(data.total_pages);
-          setIsLoading(false);
-        })
-        .catch((err) => setConnectionError(err));
-    }
-    return () => {
-      setMovies(false);
-      setPages(false);
-    };
-  }, [currentQuery, currentPage]);
+    currentQuery ? resolveMovies() : resolveTopMovies();
+  }, [currentQuery, currentPage, resolveMovies, resolveTopMovies]);
 
   const prevPage = () => {
     setCurrentPage(currentPage - 1);
@@ -62,15 +84,21 @@ function App() {
           <Route path="/" exact>
             <header className="App-header">
               <h1>MovieDubie</h1>
+              <WishListIcon></WishListIcon>
               <SearchForm
                 changed={(event) => setCurrentQuery(event.target.value)}
               />
+              <button onClick={resolveTopMovies}>IN theater</button>
             </header>
 
             {currentPageInfo}
             <div className="movies-wrapper">
               {connectionError ? (
                 <h1 style={{ color: "white" }}>Connection Error</h1>
+              ) : null}
+
+              {infoMovieListing ? (
+                <h1 style={{ color: "white" }}>{infoMovieListing}</h1>
               ) : null}
 
               {!isLoading && movies.length === 0 && (
@@ -105,6 +133,7 @@ function App() {
             </div>
           </Route>
           <Route path="/movie/:id" component={MovieDetail} />
+          <Route path="/wishlist" component={WishListPage} />
         </Switch>
       </Router>
     </div>
