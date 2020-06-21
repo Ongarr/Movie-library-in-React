@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import { Link } from "react-router-dom";
 import noPosterImg from "../../assets/no-poster.png";
@@ -24,12 +24,14 @@ const MovieDetail = ({ match }) => {
   const [movieCast, setMovieCast] = useState([]);
   const [inWishList, setInWishList] = useState('');
 
-  function checkWishList() {
+  const checkWishList = useCallback(() => {
     if (sessionStorage.getItem(movieInfo.title)) {
       return setInWishList(true);
     }
     return setInWishList(false);
-  }
+
+  }, [movieInfo.title])
+  
 
   function saveToWishList() {
     if (sessionStorage.getItem(movieInfo.title)) {
