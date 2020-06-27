@@ -1,33 +1,44 @@
 import React, { useState, useEffect } from "react";
-import MovieTile from '../../MovieTile/MovieTile'
+import MovieTile from '../../MovieTile/MovieTile';
+import { Link } from "react-router-dom";
 
 
 const WishListPage = () => {
+  
+  const [listenStorageOperation, setListenStorageOperation] = useState(1);
+  const [sessionData, setSessionData] = useState([]);
 
-const [sessionData, setSessionData] = useState([])
+  
+
+  function getThisStorageData() {
+    
+    let sessionArray = [];
+
+    Object.entries(sessionStorage).map(([key, data]) => {
+      console.log(data.id)
+      sessionArray.push(JSON.parse(data))
+      return sessionArray
+      
+    })
+
+    return setSessionData(sessionArray)
+  }
 
 
+  useEffect(() => {
+    getThisStorageData()
+    
+    console.log('ding')
+  }, [listenStorageOperation]);
 
-const sessionMovie = Object.entries(sessionStorage);
-
-
-useEffect (() => {
- 
-
-  sessionMovie.map(([key, data]) => {
-    const movieData = JSON.parse(data);
-    return sessionData.push(movieData);
- });
-}, [sessionData])
- 
-
-
-
-
+  
   return <div>
     <h2>Your wishlist</h2>
     <small>Watch`em all!</small>
-    <MovieTile movies={sessionData} />
+    <Link to="/">
+            <button>Back to mainpage</button>
+    </Link>
+    <MovieTile movies={sessionData} setListenStorageOperation={setListenStorageOperation} listenStorageOperation={listenStorageOperation} />
   </div>;
 };
 

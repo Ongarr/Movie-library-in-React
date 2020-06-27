@@ -6,15 +6,16 @@ import { MovieList, Tile, Title, P } from "./MovieTileStyle";
 
 
 
-const MovieTile = ({ movies }) => {
+const MovieTile = ({ movies, setListenStorageOperation, listenStorageOperation }) => {
 
+  
 
   return (
     <MovieList>
       {movies
         ? movies.map((movie) => (
             <Tile className="movie-tile" key={movie.id}>
-              <MovieTilePoster movie={movie}></MovieTilePoster>
+              <MovieTilePoster movie={movie} setListenStorageOperation={setListenStorageOperation} listenStorageOperation={listenStorageOperation}></MovieTilePoster>
               <Title>
                 <Link to={`/movie/${movie.id}`}>
                   <P>{movie.title}</P>

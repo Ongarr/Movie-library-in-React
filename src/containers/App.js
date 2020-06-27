@@ -20,6 +20,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [connectionError, setConnectionError] = useState(false);
   const [infoMovieListing, setInfoMovieListing] = useState(false);
+  const [listenStorageOperation, setListenStorageOperation] = useState(1);
 
   const resolvedMovie = async (data) => {
     setMovies(data.results);
@@ -110,7 +111,7 @@ function App() {
               )}
 
               {!isLoading ? (
-                <MovieTile movies={movies} />
+                <MovieTile movies={movies} setListenStorageOperation={setListenStorageOperation} listenStorageOperation={listenStorageOperation}/>
               ) : (
                 <div className="loader">Loading...</div>
               )}
