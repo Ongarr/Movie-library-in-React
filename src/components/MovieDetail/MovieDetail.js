@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { Component } from "react";
 
 import { Link } from "react-router-dom";
 import noPosterImg from "../../assets/no-poster.png";
@@ -18,77 +18,83 @@ import {
 } from "./MovieDetailStyle";
 import WishListIcon from "../WishList/WishListIcon/WishListIcon";
 
-const MovieDetail = ({ match }) => {
-  const [movieId] = useState(match.params.id);
-  const [movieInfo, setMovieInfo] = useState([]);
-  const [movieCast, setMovieCast] = useState([]);
-  const [inWishList, setInWishList] = useState('');
+class MovieDetail extends Component {
+  constructor() {
+    super();
 
-  const checkWishList = useCallback(() => {
-    if (sessionStorage.getItem(movieInfo.title)) {
-      return setInWishList(true);
+    this.state = {
+      movieId: '',
+      movieInfo: {},
+      movieCast: [],
+      inWishList: null,
     }
-    return setInWishList(false);
+  }
 
-  }, [movieInfo.title])
+  componentDidMount () {
+    const movieId = this.props.match.params.id
 
-  const saveToWishList = useCallback(() => {
-    if ( inWishList===true) {
-    return sessionStorage.removeItem(movieInfo.title);
+    if (!movieId) {
+      return;
     }
-    return sessionStorage.setItem(movieInfo.title, JSON.stringify(movieInfo));
-  }, [inWishList, movieInfo])
 
-  useEffect(() => {
-    const getMovieDetail = async () => {
-      let data = await movieDetailApi(movieId);
-      return setMovieInfo(data);
-    };
-    const getMovieCast = async () => {
-      const data = await movieCastApi(movieId);
-      return setMovieCast(data.cast);
-    };
-    getMovieDetail();
-    getMovieCast();
-    checkWishList();
-  }, [movieId, checkWishList, saveToWishList]);
+    this.setState({ movieId });
 
-  const checkForPoster =
-    movieInfo.poster_path === null
-      ? noPosterImg
-      : `https://image.tmdb.org/t/p/w342/${movieInfo.poster_path}`;
+    const checkWishList = (title) => sessionStorage.getItem(title);
+
+    movieDetailApi(movieId).then(details => {
+      this.setState({ movieInfo: details });
+      this.setState({ inWishList: checkWishList(details.title) });
+    });
+    movieCastApi(movieId).then(data => this.setState({ movieCast: data.cast }));
+  }
+
+  render () {
+    const saveToWishList = () => {
+      if ( this.state.inWishList === true) {
+        this.setState({ inWishList: false });
+        return sessionStorage.removeItem(this.state.movieInfo.title);
+      }
+      this.setState({ inWishList: true });
+      return sessionStorage.setItem(this.state.movieInfo.title, JSON.stringify(this.state.movieInfo));
+    }
+
+    const checkForPoster =
+      this.state.movieInfo.poster_path === null
+        ? noPosterImg
+        : `https://image.tmdb.org/t/p/w342/${this.state.movieInfo.poster_path}`;
 
 
-  return (
-    <MovieWrapper>
-      <WishListIcon></WishListIcon>
-      <BasicInfo>
-        <div>
-          <img src={checkForPoster} alt={movieInfo.title}></img>
-        </div>
-        <div>
-          <Title>{movieInfo.title}</Title>
-          <Rating>Rating {movieInfo.vote_average}</Rating>
-          <Overview>{movieInfo.overview}</Overview>
-          <AddToList onClick={saveToWishList}>{inWishList ? 'Remove from watchlist' : 'Add to watchlist'}</AddToList>
-          <Link to="/">
-            <Button>Go Back</Button>
-          </Link>
-        </div>
-      </BasicInfo>
-      <Cast>
-        <h2>Cast:</h2>
-        <List>
-          {movieCast.map((actor, i) => (
-            <Actor key={i}>
-              <p>Character: {actor.character}</p>
-              <p>Actor: {actor.name}</p>
-            </Actor>
-          ))}
-        </List>
-      </Cast>
-    </MovieWrapper>
-  );
-};
+    return (
+      <MovieWrapper>
+        <WishListIcon></WishListIcon>
+        <BasicInfo>
+          <div>
+            <img src={checkForPoster} alt={this.state.movieInfo.title}></img>
+          </div>
+          <div>
+            <Title>{this.state.movieInfo.title}</Title>
+            <Rating>Rating {this.state.movieInfo.vote_average}</Rating>
+            <Overview>{this.state.movieInfo.overview}</Overview>
+            <AddToList onClick={saveToWishList}>{this.state.inWishList ? 'Remove from watchlist' : 'Add to watchlist'}</AddToList>
+            <Link to="/">
+              <Button>Go Back</Button>
+            </Link>
+          </div>
+        </BasicInfo>
+        <Cast>
+          <h2>Cast:</h2>
+          <List>
+            {this.state.movieCast.map((actor, i) => (
+              <Actor key={i}>
+                <p>Character: {actor.character}</p>
+                <p>Actor: {actor.name}</p>
+              </Actor>
+            ))}
+          </List>
+        </Cast>
+      </MovieWrapper>
+    );
+  }
+}
 
-export default MovieDetail;
+export default MovieDetail

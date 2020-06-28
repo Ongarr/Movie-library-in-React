@@ -4,18 +4,14 @@ import { Link } from "react-router-dom";
 
 import { MovieList, Tile, Title, P } from "./MovieTileStyle";
 
-
-
-const MovieTile = ({ movies, setListenStorageOperation, listenStorageOperation }) => {
-
-  
+const MovieTile = ({ movies }) => {
 
   return (
     <MovieList>
       {movies
         ? movies.map((movie) => (
             <Tile className="movie-tile" key={movie.id}>
-              <MovieTilePoster movie={movie} setListenStorageOperation={setListenStorageOperation} listenStorageOperation={listenStorageOperation}></MovieTilePoster>
+              <MovieTilePoster movie={movie}></MovieTilePoster>
               <Title>
                 <Link to={`/movie/${movie.id}`}>
                   <P>{movie.title}</P>
