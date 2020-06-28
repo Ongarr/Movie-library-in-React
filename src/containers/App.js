@@ -59,7 +59,7 @@ function App() {
  
     resolveTopMovies();
     currentQuery ? resolveMovies() : resolveTopMovies();
-  }, [currentQuery]);
+  }, [currentQuery, currentPage]);
 
   const prevPage = () => {
     setCurrentPage(currentPage - 1);
