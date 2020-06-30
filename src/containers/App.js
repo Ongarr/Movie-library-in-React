@@ -22,43 +22,47 @@ function App() {
   const [infoMovieListing, setInfoMovieListing] = useState(false);
   const [listenStorageOperation, setListenStorageOperation] = useState(1);
 
-  const resolvedMovie = async (data) => {
+  const setMoviesFromQuery = async (data) => {
     setMovies(data.results);
     setPages(data.total_pages);
     setInfoMovieListing(false);
     return setIsLoading(false);
   };
 
-  const resolvedTopMovie = async (data) => {
+  const setMoviesInTheatres = async (data) => {
     setMovies(data.results);
     setPages(data.total_pages);
     setInfoMovieListing("In Theaters");
     return setIsLoading(false);
   };
 
-  const resolveTopMovies = async () => {
+  const askForMoviesInTheaters = async () => {
     try {
       const topMovies = await topMovieApi(currentPage);
-      return resolvedTopMovie(topMovies);
+      return setMoviesInTheatres(topMovies);
     } catch (error) {
       return setConnectionError(true);
     }
   };
 
-  const resolveMovies = async () => {
+  const askForMovieFromQuery = async () => {
     setIsLoading(true);
     try {
       const movies = await getMovies(currentQuery, currentPage);
-      return resolvedMovie(movies);
+      return setMoviesFromQuery(movies);
     } catch (error) {
       return setConnectionError(true);
     }
   };
 
   useEffect(() => {
+    askForMoviesInTheaters();
+  }, {})
+
+  useEffect(() => {
  
-    resolveTopMovies();
-    currentQuery ? resolveMovies() : resolveTopMovies();
+    
+    currentQuery ? askForMovieFromQuery() : askForMoviesInTheaters();
   }, [currentQuery, currentPage]);
 
   const prevPage = () => {
@@ -91,7 +95,7 @@ function App() {
               <SearchForm
                 changed={(event) => setCurrentQuery(event.target.value)}
               />
-              <button onClick={resolveTopMovies}>IN theater</button>
+              <button onClick={askForMoviesInTheaters}>IN theater</button>
             </header>
 
             {currentPageInfo}
