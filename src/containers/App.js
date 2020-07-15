@@ -1,142 +1,107 @@
-import React, { useState, useEffect } from "react";
-import "./App.css";
-import MovieTile from "../components/MovieTile/MovieTile";
-import SearchForm from "../components/SearchForm/SearchForm";
-import WhichPage from "../components/WhichPage/WhichPage";
-import ButtonPageControl from "../components/ButtonPageControl/ButtonPageControl";
-import MovieDetail from "../components/MovieDetail/MovieDetail";
-import WishListIcon from "../components/WishList/WishListIcon/WishListIcon";
-import WishListPage from "../components/WishList/WishListPage/WishListPage";
+import React, { useState, useEffect } from 'react';
+import './App.css';
+import MovieTile from '../components/MovieTile/MovieTile';
+import WhichPage from '../components/WhichPage/WhichPage';
+import MovieDetail from '../components/MovieDetail/MovieDetail';
+import WishListPage from '../components/WishList/WishListPage/WishListPage';
+import Pagination from '../components/Pagination/Pagination';
 
-import { getMovies, topMovieApi } from "../apiCall";
+import { getMovies } from '../api/MovieDbApi';
 
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from 'react-router-dom';
+import Header from '../components/Header/Header';
 
 function App() {
   const [movies, setMovies] = useState(false);
   const [pages, setPages] = useState(false);
-  const [currentQuery, setCurrentQuery] = useState(false);
+  const [currentQuery, setCurrentQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [connectionError, setConnectionError] = useState(false);
-  const [infoMovieListing, setInfoMovieListing] = useState(false);
-  const [listenStorageOperation, setListenStorageOperation] = useState(1);
+  const [
+    listenStorageOperation,
+    setListenStorageOperation,
+  ] = useState(1);
 
-  const setMoviesFromQuery = async (data) => {
-    setMovies(data.results);
-    setPages(data.total_pages);
-    setInfoMovieListing(false);
-    return setIsLoading(false);
-  };
+  function handleChangeInputSearch(inputValue) {
+    setCurrentQuery(inputValue);
+  }
 
-  const setMoviesInTheatres = async (data) => {
-    setMovies(data.results);
-    setPages(data.total_pages);
-    setInfoMovieListing("In Theaters");
-    return setIsLoading(false);
-  };
-
-  const askForMoviesInTheaters = async () => {
-    try {
-      const topMovies = await topMovieApi(currentPage);
-      return setMoviesInTheatres(topMovies);
-    } catch (error) {
-      return setConnectionError(true);
-    }
-  };
-
-  const askForMovieFromQuery = async () => {
-    setIsLoading(true);
-    try {
-      const movies = await getMovies(currentQuery, currentPage);
-      return setMoviesFromQuery(movies);
-    } catch (error) {
-      return setConnectionError(true);
-    }
-  };
+  function handleCurrentPage(page) {
+    setCurrentPage(page);
+  }
 
   useEffect(() => {
-    askForMoviesInTheaters();
-  }, {})
+    const askForMovieFromQuery = async () => {
+      setIsLoading(true);
+      try {
+        const movies = await getMovies(currentQuery, currentPage);
+        return setMoviesFromQuery(movies);
+      } catch (error) {
+        return setConnectionError(true);
+      }
+    };
 
-  useEffect(() => {
- 
-    
-    currentQuery ? askForMovieFromQuery() : askForMoviesInTheaters();
+    const setMoviesFromQuery = async (data) => {
+      setMovies(data.results);
+      setPages(data.total_pages);
+      return setIsLoading(false);
+    };
+
+    if (currentQuery === '') {
+      console.log('nope');
+      setMovies(false);
+      setPages(false);
+      setCurrentPage(1);
+    } else {
+      askForMovieFromQuery();
+      window.scrollTo(0, 0);
+    }
   }, [currentQuery, currentPage]);
-
-  const prevPage = () => {
-    setCurrentPage(currentPage - 1);
-  };
-
-  const nextPage = () => {
-    setCurrentPage(currentPage + 1);
-  };
-
-  const testForPrevButton = currentPage > 1 && !isLoading;
-  const testForNextButton = pages >= 1 && currentPage !== pages && !isLoading;
-
-  const currentPageInfo =
-    pages && !isLoading ? (
-      <WhichPage
-        key={currentPage}
-        pageInfoText={`You are on page ${currentPage} of ${pages}`}
-      />
-    ) : null;
 
   return (
     <div className="App">
       <Router>
+        <Header onChange={handleChangeInputSearch}></Header>
         <Switch>
           <Route path="/" exact>
-            <header className="App-header">
-              <h1>MovieDubie</h1>
-              <WishListIcon></WishListIcon>
-              <SearchForm
-                changed={(event) => setCurrentQuery(event.target.value)}
+            {pages && !isLoading ? (
+              <WhichPage
+                key={currentPage}
+                pageInfoText={`You are on page ${currentPage} of ${pages}`}
               />
-              <button onClick={askForMoviesInTheaters}>IN theater</button>
-            </header>
-
-            {currentPageInfo}
+            ) : null}
             <div className="movies-wrapper">
               {connectionError ? (
-                <h1 style={{ color: "white" }}>Connection Error</h1>
-              ) : null}
-
-              {infoMovieListing ? (
-                <h1 style={{ color: "white" }}>{infoMovieListing}</h1>
+                <h1 style={{ color: 'white' }}>Connection Error</h1>
               ) : null}
 
               {!isLoading && movies.length === 0 && (
-                <h1 style={{ color: "white" }}>
+                <h1 style={{ color: 'white' }}>
                   Sorry, there is no such movie in database
                 </h1>
               )}
 
-              {!isLoading ? (
-                <MovieTile movies={movies} setListenStorageOperation={setListenStorageOperation} listenStorageOperation={listenStorageOperation}/>
-              ) : (
-                <div className="loader">Loading...</div>
-              )}
+              {currentQuery ? (
+                <MovieTile
+                  movies={movies}
+                  setListenStorageOperation={
+                    setListenStorageOperation
+                  }
+                  listenStorageOperation={listenStorageOperation}
+                />
+              ) : null}
 
-              <section className="paginations">
-                {currentPageInfo}
-                <div className="pag-buttons">
-                  {testForPrevButton ? (
-                    <ButtonPageControl
-                      buttonText={"Prev Page"}
-                      pageSwitcher={prevPage}
-                    />
-                  ) : null}
-                  {testForNextButton ? (
-                    <ButtonPageControl
-                      buttonText={"Next Page"}
-                      pageSwitcher={nextPage}
-                    />
-                  ) : null}
-                </div>
-              </section>
+              <Pagination
+                currentPage={currentPage}
+                isLoading={isLoading}
+                pages={pages}
+                handleCurrentPage={handleCurrentPage}
+              />
             </div>
           </Route>
           <Route path="/movie/:id" component={MovieDetail} />

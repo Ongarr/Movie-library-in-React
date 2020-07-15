@@ -1,10 +1,10 @@
-import React from "react";
-import { Input } from "./SearchFormStyle";
+import React from 'react';
+import { Input } from './SearchFormStyle';
 
 const SearchForm = (props) => {
   return (
     <Input
-      placeholder="Give me some keyword"
+      placeholder="Type for search movie..."
       type="text"
       onChange={props.changed}
     />

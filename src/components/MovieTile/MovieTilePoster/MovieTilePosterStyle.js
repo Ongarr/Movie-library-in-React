@@ -25,16 +25,16 @@ const Button = styled.button`
   font-size: 20px;
   transition: transform 0.5s ease-in-out;
   cursor: pointer;
-`
+`;
 
 const Wrapper = styled.div`
-  position:relative;
-  overflow:hidden;
+  position: relative;
+  overflow: hidden;
   min-height: 278px;
 
   &:hover ${Button} {
-    transform: translateX(0%)
+    transform: translateX(0%);
   }
-`
+`;
 
 export { Img, Loader, Button, Wrapper };

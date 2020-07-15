@@ -1,11 +1,10 @@
-import React from "react";
-import MovieTilePoster from "./MovieTilePoster/MovieTilePoster";
-import { Link } from "react-router-dom";
+import React from 'react';
+import MovieTilePoster from './MovieTilePoster/MovieTilePoster';
+import { Link } from 'react-router-dom';
 
-import { MovieList, Tile, Title, P } from "./MovieTileStyle";
+import { MovieList, Tile, Title, P } from './MovieTileStyle';
 
 const MovieTile = ({ movies }) => {
-
   return (
     <MovieList>
       {movies

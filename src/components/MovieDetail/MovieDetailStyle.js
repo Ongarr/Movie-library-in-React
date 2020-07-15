@@ -1,17 +1,17 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const MovieWrapper = styled.div`
   display: flex;
   justify-content: center;
   flex-direction: column;
-  max-width: 1080px;
-  padding-top: 100px;
-  padding-bottom: 100px;
+
   margin: auto;
   align-items: center;
+  width: 100%;
 
   @media (max-width: 768px) {
     flex-direction: column;
+    width: 90%;
   }
 `;
 
@@ -22,14 +22,14 @@ const Rating = styled.span`
 `;
 
 const Title = styled.h1`
-  color: white;
+  color: black;
   display: block;
   max-width: 80%;
   margin: auto;
   margin-top: 50px;
 `;
 const Overview = styled.p`
-  color: white;
+  color: black;
   display: block;
   max-width: 80%;
   text-align: justify;
@@ -37,28 +37,55 @@ const Overview = styled.p`
 `;
 
 const Button = styled.button`
+  margin-top: 5px;
   padding: 10px 15px;
-  width: 80%;
+  transition: background, color 0.4s linear;
+  background: lightgrey;
+  border: 0px solid;
+  cursor: pointer;
+  color: black;
+  border-radius: 50px;
+  width: 90%;
 `;
 
 const AddToList = styled.button`
   padding: 10px 15px;
-  width: 80%;
+  transition: background, color 0.4s linear;
+  background: linear-gradient(to left, #2c5364, #203a43, #0f2027);
+  border: 0px solid;
+  cursor: pointer;
+  color: white;
+  border-radius: 50px;
+  width: 90%;
 `;
 
-const BasicInfo = styled.div`
+const BasicInfoWrapper = styled.div`
+  background-image: linear-gradient(
+    to right,
+    rgba(11.76%, 18.43%, 23.53%, 0.84) 0,
+    rgba(18.82%, 25.49%, 30.59%, 0.64) 100%
+  );
+  width: 100%;
   display: flex;
   justify-content: center;
   flex-direction: row;
   align-items: center;
+`;
 
+const BasicInfo = styled.div`
+  display: flex;
+  padding: 50px 0;
+  justify-content: center;
+  flex-direction: row;
+  align-items: center;
+  max-width: 1080px;
   @media (max-width: 768px) {
     flex-direction: column;
   }
 `;
 
 const Cast = styled.div`
-  color: white;
+  color: black;
 
   h2 {
     font-size: 40px;
@@ -91,4 +118,5 @@ export {
   Rating,
   Actor,
   AddToList,
+  BasicInfoWrapper,
 };
