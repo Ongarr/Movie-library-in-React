@@ -5,14 +5,22 @@ import { Link } from 'react-router-dom';
 
 import { AppHeader } from './HeaderStyle';
 
-function Header({ onChange }) {
+function Header({ onChange, currentQuery }) {
   return (
-    <AppHeader className="App-header">
-      <Link to="/">
+    <AppHeader>
+      <Link
+        to="/"
+        onClick={() => {
+          onChange('');
+        }}
+      >
         <h1 className="logo-title">MovieDubie</h1>
       </Link>
       <WishListIcon></WishListIcon>
-      <SearchForm changed={(event) => onChange(event.target.value)} />
+      <SearchForm
+        changed={(event) => onChange(event.target.value)}
+        currentQuery={currentQuery}
+      />
     </AppHeader>
   );
 }

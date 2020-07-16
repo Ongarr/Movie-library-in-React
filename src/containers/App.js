@@ -66,19 +66,22 @@ function App() {
   return (
     <div className="App">
       <Router>
-        <Header onChange={handleChangeInputSearch}></Header>
+        <Header
+          onChange={handleChangeInputSearch}
+          currentQuery={currentQuery}
+        ></Header>
         <Switch>
           <Route path="/" exact>
-            {pages && !isLoading ? (
+            {pages && !isLoading && (
               <WhichPage
                 key={currentPage}
                 pageInfoText={`You are on page ${currentPage} of ${pages}`}
               />
-            ) : null}
+            )}
             <div className="movies-wrapper">
-              {connectionError ? (
+              {connectionError && (
                 <h1 style={{ color: 'white' }}>Connection Error</h1>
-              ) : null}
+              )}
 
               {!isLoading && movies.length === 0 && (
                 <h1 style={{ color: 'white' }}>
@@ -86,7 +89,7 @@ function App() {
                 </h1>
               )}
 
-              {currentQuery ? (
+              {currentQuery && (
                 <MovieTile
                   movies={movies}
                   setListenStorageOperation={
@@ -94,7 +97,7 @@ function App() {
                   }
                   listenStorageOperation={listenStorageOperation}
                 />
-              ) : null}
+              )}
 
               <Pagination
                 currentPage={currentPage}

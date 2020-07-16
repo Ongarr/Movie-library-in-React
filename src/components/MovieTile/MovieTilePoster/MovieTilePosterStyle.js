@@ -7,10 +7,14 @@ const Img = styled.img`
 `;
 const Loader = styled.div`
   color: #282c34;
-  background: black;
+  background: white;
   min-height: 278px;
   max-height: 278px;
   display: flex;
+  position: absolute;
+  top: 0px;
+  left: 50%;
+  transform: translateX(-50%);
   justify-content: center;
   align-items: center;
 `;
@@ -31,6 +35,7 @@ const Wrapper = styled.div`
   position: relative;
   overflow: hidden;
   min-height: 278px;
+  width: 100%;
 
   &:hover ${Button} {
     transform: translateX(0%);

@@ -1,12 +1,13 @@
 import React from 'react';
 import { Input } from './SearchFormStyle';
 
-const SearchForm = (props) => {
+const SearchForm = ({ changed, currentQuery }) => {
   return (
     <Input
       placeholder="Type for search movie..."
       type="text"
-      onChange={props.changed}
+      onChange={changed}
+      value={currentQuery}
     />
   );
 };
