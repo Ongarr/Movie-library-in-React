@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 import { AppHeader } from './HeaderStyle';
 
-function Header({ onChange, currentQuery }) {
+const Header = ({ onChange, currentQuery }) => {
   return (
     <AppHeader>
       <Link
@@ -23,6 +23,6 @@ function Header({ onChange, currentQuery }) {
       />
     </AppHeader>
   );
-}
+};
 
 export default Header;

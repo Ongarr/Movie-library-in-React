@@ -6,10 +6,13 @@ const Img = styled.img`
   max-height: 278px;
 `;
 const Loader = styled.div`
+  box-sizing: border-box;
   color: #282c34;
   background: white;
   min-height: 278px;
   max-height: 278px;
+  width: 100%;
+  border: 1px solid black;
   display: flex;
   position: absolute;
   top: 0px;

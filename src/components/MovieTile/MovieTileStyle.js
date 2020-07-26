@@ -4,7 +4,7 @@ const MovieList = styled.section`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
   justify-items: center;
-  padding: 50px 20px;
+  padding: 0px 20px;
   grid-row-gap: 10px;
   grid-column-gap: 10px;
   background: transparent;

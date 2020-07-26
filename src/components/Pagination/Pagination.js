@@ -1,6 +1,6 @@
 import React from 'react';
 import ButtonPageControl from '../Pagination/PaginationButton/PaginationButton';
-import currentPageInfo from '../WhichPage/WhichPage';
+import CurrentPageInfo from '../WhichPage/WhichPage';
 
 const Pagination = ({
   currentPage,
@@ -18,9 +18,10 @@ const Pagination = ({
   const testForPrevButton = currentPage > 1 && !isLoading;
   const testForNextButton =
     pages >= 1 && currentPage !== pages && !isLoading;
+
   return (
     <section className="paginations">
-      {currentPageInfo}
+      <CurrentPageInfo />
       <div className="pag-buttons">
         {testForPrevButton ? (
           <ButtonPageControl

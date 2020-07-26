@@ -28,28 +28,29 @@ function App() {
   ] = useState(1);
 
   function handleChangeInputSearch(inputValue) {
-    setCurrentQuery(inputValue);
+    return setCurrentQuery(inputValue);
   }
 
   function handleCurrentPage(page) {
-    setCurrentPage(page);
+    return setCurrentPage(page);
   }
 
   useEffect(() => {
+    const setMoviesFromQuery = async (data) => {
+      setMovies(data.results);
+      setPages(data.total_pages);
+      return setIsLoading(false);
+    };
+
     const askForMovieFromQuery = async () => {
       setIsLoading(true);
       try {
         const movies = await getMovies(currentQuery, currentPage);
         return setMoviesFromQuery(movies);
       } catch (error) {
+        console.log(error);
         return setConnectionError(true);
       }
-    };
-
-    const setMoviesFromQuery = async (data) => {
-      setMovies(data.results);
-      setPages(data.total_pages);
-      return setIsLoading(false);
     };
 
     if (currentQuery === '') {
