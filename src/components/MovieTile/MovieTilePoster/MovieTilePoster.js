@@ -19,7 +19,7 @@ const iconWishListSVG = (
 
 const checkWishList = (title) => sessionStorage.getItem(title);
 
-const MovieTilePoster = ({ movie }) => {
+const MovieTilePoster = ({ movie, size }) => {
   const [Loading, setLoading] = useState(true);
   const [inWishList, setInWishList] = useState(
     checkWishList(movie.title),
@@ -38,12 +38,12 @@ const MovieTilePoster = ({ movie }) => {
   const checkForPoster =
     movie.poster_path === null
       ? noPosterImg
-      : `https://image.tmdb.org/t/p/w185${movie.poster_path}`;
+      : `https://image.tmdb.org/t/p/w${size}${movie.poster_path}`;
 
   return (
     <Wrapper>
       {Loading ? (
-        <Loader>
+        <Loader size={size}>
           <div className="lds-ring">
             <div></div>
             <div></div>
@@ -57,6 +57,7 @@ const MovieTilePoster = ({ movie }) => {
         src={checkForPoster}
         forStyle={Loading}
         alt={movie.title}
+        size={size}
       ></Img>
       <Button onClick={saveToWishList}>
         {inWishList ? 'X' : iconWishListSVG}

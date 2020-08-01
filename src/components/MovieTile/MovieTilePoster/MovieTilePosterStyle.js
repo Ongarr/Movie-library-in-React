@@ -1,16 +1,16 @@
 import styled from 'styled-components';
 
 const Img = styled.img`
-  width: 185px;
-  min-height: ${(props) => (props.forStyle ? '0px' : '278px')};
-  max-height: 278px;
+  width: ${(props) => props.size}px;
+  min-height: ${(props) => props.size * 1.5}px;
+  max-height: ${(props) => props.size * 1.5}px;
 `;
 const Loader = styled.div`
   box-sizing: border-box;
   color: #282c34;
   background: white;
-  min-height: 278px;
-  max-height: 278px;
+  min-height: ${(props) => props.size * 1.5}px;
+  max-height: ${(props) => props.size * 1.5}px;
   width: 100%;
   border: 1px solid black;
   display: flex;

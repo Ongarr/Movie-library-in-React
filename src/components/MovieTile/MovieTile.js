@@ -10,7 +10,10 @@ const MovieTile = ({ movies }) => {
       {movies
         ? movies.map((movie) => (
             <Tile className="movie-tile" key={movie.id}>
-              <MovieTilePoster movie={movie}></MovieTilePoster>
+              <MovieTilePoster
+                movie={movie}
+                size="185"
+              ></MovieTilePoster>
               <Title>
                 <Link to={`/movie/${movie.id}`}>
                   <P>{movie.title}</P>

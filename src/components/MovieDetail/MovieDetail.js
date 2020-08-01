@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 
 import { Link } from 'react-router-dom';
-import noPosterImg from '../../assets/no-poster.png';
 import { movieDetailApi } from '../../api/MovieDbApi';
 import { movieCastApi } from '../../api/MovieDbApi';
+import MovieTilePoster from '../MovieTile/MovieTilePoster/MovieTilePoster';
 import {
   MovieWrapper,
   List,
@@ -27,12 +27,13 @@ class MovieDetail extends Component {
       movieInfo: {},
       movieCast: [],
       inWishList: null,
+      loading: false,
     };
   }
 
   componentDidMount() {
     const movieId = this.props.match.params.id;
-
+    this.setState({ loading: true });
     if (!movieId) {
       return;
     }
@@ -41,15 +42,15 @@ class MovieDetail extends Component {
 
     const checkWishList = (title) => sessionStorage.getItem(title);
 
-    movieDetailApi(movieId).then((details) => {
-      console.log(details);
-      this.setState({ movieInfo: details });
-      this.setState({ inWishList: checkWishList(details.title) });
-    });
-
-    movieCastApi(movieId).then((data) =>
-      this.setState({ movieCast: data.cast }),
-    );
+    this.setState({ loading: true });
+    Promise.all([movieDetailApi(movieId), movieCastApi(movieId)])
+      .then(([details, cast]) => {
+        this.setState({ movieInfo: details });
+        this.setState({ inWishList: checkWishList(details.title) });
+        this.setState({ movieCast: cast.cast });
+        this.setState({ loading: false });
+      })
+      .then(() => {});
   }
 
   render() {
@@ -65,49 +66,48 @@ class MovieDetail extends Component {
       );
     };
 
-    const checkForPoster =
-      this.state.movieInfo.poster_path === null
-        ? noPosterImg
-        : `https://image.tmdb.org/t/p/w342/${this.state.movieInfo.poster_path}`;
-
     return (
       <MovieWrapper>
-        <BasicInfoWrapper>
-          <BasicInfo>
-            <div>
-              <img
-                src={checkForPoster}
-                alt={this.state.movieInfo.title}
-              ></img>
-            </div>
-            <div>
-              <Title>{this.state.movieInfo.title}</Title>
-              <Rating>
-                Rating {this.state.movieInfo.vote_average}
-              </Rating>
-              <Overview>{this.state.movieInfo.overview}</Overview>
-              <AddToList onClick={saveToWishList}>
-                {this.state.inWishList
-                  ? 'Remove from watchlist'
-                  : 'Add to watchlist'}
-              </AddToList>
-              <Link to="/">
-                <Button>Go Back</Button>
-              </Link>
-            </div>
-          </BasicInfo>
-        </BasicInfoWrapper>
-        <Cast>
-          <h2>Cast:</h2>
-          <List>
-            {this.state.movieCast.map((actor, i) => (
-              <Actor key={i}>
-                <p>Character: {actor.character}</p>
-                <p>Actor: {actor.name}</p>
-              </Actor>
-            ))}
-          </List>
-        </Cast>
+        {this.state.loading ? (
+          <h1>Loading</h1>
+        ) : (
+          <div>
+            <BasicInfoWrapper>
+              <BasicInfo>
+                <MovieTilePoster
+                  movie={this.state.movieInfo}
+                  size="342"
+                ></MovieTilePoster>
+                <div>
+                  <Title>{this.state.movieInfo.title}</Title>
+                  <Rating>
+                    Rating {this.state.movieInfo.vote_average}
+                  </Rating>
+                  <Overview>{this.state.movieInfo.overview}</Overview>
+                  <AddToList onClick={saveToWishList}>
+                    {this.state.inWishList
+                      ? 'Remove from watchlist'
+                      : 'Add to watchlist'}
+                  </AddToList>
+                  <Link to="/">
+                    <Button>Go Back</Button>
+                  </Link>
+                </div>
+              </BasicInfo>
+            </BasicInfoWrapper>
+            <Cast>
+              <h2>Cast:</h2>
+              <List>
+                {this.state.movieCast.map((actor, i) => (
+                  <Actor key={i}>
+                    <p>Character: {actor.character}</p>
+                    <p>Actor: {actor.name}</p>
+                  </Actor>
+                ))}
+              </List>
+            </Cast>
+          </div>
+        )}
       </MovieWrapper>
     );
   }
