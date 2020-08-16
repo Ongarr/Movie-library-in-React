@@ -19,18 +19,6 @@ Features
 
 - "watch list" (still in development ;))
 
-<<<<<<< HEAD
-
-# <<<<<<< HEAD
-
----
-
-> > > > > > > 88145be... Add readme
-> > > > > > > This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-> > > > > > > =======
-> > > > > > > This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-> > > > > > > 0ff102e... Remove linebreaks from readme
-
 ## Available Scripts
 
 In the project directory, you can run:
