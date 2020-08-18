@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/Movie-library-in-React/static/css/main.4e54e323.chunk.css",
+    "main.js": "/Movie-library-in-React/static/js/main.5680043e.chunk.js",
+    "main.js.map": "/Movie-library-in-React/static/js/main.5680043e.chunk.js.map",
+    "runtime-main.js": "/Movie-library-in-React/static/js/runtime-main.d4152801.js",
+    "runtime-main.js.map": "/Movie-library-in-React/static/js/runtime-main.d4152801.js.map",
+    "static/js/2.082cbb3d.chunk.js": "/Movie-library-in-React/static/js/2.082cbb3d.chunk.js",
+    "static/js/2.082cbb3d.chunk.js.map": "/Movie-library-in-React/static/js/2.082cbb3d.chunk.js.map",
+    "index.html": "/Movie-library-in-React/index.html",
+    "precache-manifest.0ff4d4231a6b37bb5f6e20eba4ad493f.js": "/Movie-library-in-React/precache-manifest.0ff4d4231a6b37bb5f6e20eba4ad493f.js",
+    "service-worker.js": "/Movie-library-in-React/service-worker.js",
+    "static/css/main.4e54e323.chunk.css.map": "/Movie-library-in-React/static/css/main.4e54e323.chunk.css.map",
+    "static/js/2.082cbb3d.chunk.js.LICENSE.txt": "/Movie-library-in-React/static/js/2.082cbb3d.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.d4152801.js",
+    "static/js/2.082cbb3d.chunk.js",
+    "static/css/main.4e54e323.chunk.css",
+    "static/js/main.5680043e.chunk.js"
+  ]
+}
