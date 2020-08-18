@@ -4,7 +4,7 @@ Live version deployed on heroku [HERE](https://moviedubiereact.herokuapp.com/)
 
 ## Search app for movies
 
-##### App base on moviedb API [Link](https://developers.themoviedb.org/)
+##### App is using movieDB API [Link](https://developers.themoviedb.org/)
 
 Features
 
