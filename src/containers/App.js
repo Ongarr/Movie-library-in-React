@@ -3,7 +3,7 @@ import './App.css';
 import MovieTile from '../components/MovieTile/MovieTile';
 import WhichPage from '../components/WhichPage/WhichPage';
 import MovieDetail from '../components/MovieDetail/MovieDetail';
-import WishListPage from '../components/WishList/WishListPage/WishListPage';
+
 import Pagination from '../components/Pagination/Pagination';
 
 import { getMovies } from '../api/MovieDbApi';
@@ -109,7 +109,6 @@ function App() {
             </div>
           </Route>
           <Route path="/movie/:id" component={MovieDetail} />
-          <Route path="/wishlist" component={WishListPage} />
         </Switch>
       </Router>
     </div>

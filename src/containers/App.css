@@ -43,14 +43,6 @@ section.paginations {
   justify-content: center;
 }
 
-.wishlist-icon {
-  position: absolute;
-  right: 30px;
-  top: 30px;
-  width: 50px;
-  height: 50px;
-}
-
 @media (min-width: 700px) {
   .movie-listing {
     grid-template-columns: repeat(auto-fill, 25%);
