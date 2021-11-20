@@ -4,10 +4,9 @@ import { Input } from './SearchFormStyle';
 const SearchForm = ({ changed, currentQuery }) => {
   return (
     <Input
-      placeholder="Type for search movie..."
+      placeholder="Start typing to search movie..."
       type="text"
       onChange={changed}
-      value={currentQuery}
     />
   );
 };

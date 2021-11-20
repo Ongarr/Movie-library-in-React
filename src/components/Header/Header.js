@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 import { AppHeader } from './HeaderStyle';
 
-const Header = ({ onChange, currentQuery }) => {
+const Header = ({ onChange }) => {
   return (
     <AppHeader>
       <Link
@@ -16,10 +16,7 @@ const Header = ({ onChange, currentQuery }) => {
       >
         <h1 className="logo-title">MovieDubie</h1>
       </Link>
-      <SearchForm
-        changed={(event) => onChange(event.target.value)}
-        currentQuery={currentQuery}
-      />
+      <SearchForm changed={(event) => onChange(event.target.value)} />
     </AppHeader>
   );
 };

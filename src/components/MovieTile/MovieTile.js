@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import { MovieList, Tile, Title, P } from './MovieTileStyle';
 
-const MovieTile = ({ movies }) => {
+const MovieTile = React.memo(({ movies }) => {
   return (
     <MovieList>
       {movies
@@ -24,6 +24,6 @@ const MovieTile = ({ movies }) => {
         : null}
     </MovieList>
   );
-};
+});
 
 export default MovieTile;
