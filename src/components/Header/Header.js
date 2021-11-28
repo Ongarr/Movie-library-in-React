@@ -16,7 +16,7 @@ const Header = ({ onChange }) => {
       >
         <h1 className="logo-title">MovieDubie</h1>
       </Link>
-      <SearchForm changed={(event) => onChange(event.target.value)} />
+      <SearchForm changed={onChange} />
     </AppHeader>
   );
 };

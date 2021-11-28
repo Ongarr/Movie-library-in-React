@@ -40,7 +40,7 @@ function App() {
       console.log('useEffect');
       setIsLoading(true);
       const timeoutOnSearch = setTimeout(() => {
-        const setMoviesFromQuery = async (data) => {
+        const setMoviesFromQuery = (data) => {
           setMovies(data.results);
           setPages(data.total_pages);
           return setIsLoading(false);
@@ -55,15 +55,8 @@ function App() {
           }
         };
 
-        if (currentQuery === '') {
-          console.log('nope');
-          setMovies(false);
-          setPages(false);
-          setCurrentPage(1);
-        } else {
-          askForMovieFromQuery();
-          window.scrollTo(0, 0);
-        }
+        askForMovieFromQuery();
+        window.scrollTo(0, 0);
       }, 700);
       return () => {
         clearTimeout(timeoutOnSearch);
@@ -99,7 +92,7 @@ function App() {
                 <MovieTile movies={movies} />
               )}
 
-              {!pages && (
+              {pages > 0 && (
                 <Pagination
                   currentPage={currentPage}
                   isLoading={isLoading}
