@@ -5,18 +5,13 @@ import { Link } from 'react-router-dom';
 
 import { AppHeader } from './HeaderStyle';
 
-const Header = ({ onChange }) => {
+const Header = () => {
   return (
     <AppHeader>
-      <Link
-        to="/"
-        onClick={() => {
-          onChange('');
-        }}
-      >
+      <Link to="/" onClick={() => {}}>
         <h1 className="logo-title">MovieDubie</h1>
       </Link>
-      <SearchForm changed={onChange} />
+      <SearchForm />
     </AppHeader>
   );
 };

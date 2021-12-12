@@ -1,10 +1,12 @@
 import React from 'react';
 import MovieTilePoster from './MovieTilePoster/MovieTilePoster';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import { MovieList, Tile, Title, P } from './MovieTileStyle';
 
-const MovieTile = React.memo(({ movies }) => {
+const MovieTile = React.memo(() => {
+  const movies = useSelector((state) => state.movies.movies);
   return (
     <MovieList>
       {movies

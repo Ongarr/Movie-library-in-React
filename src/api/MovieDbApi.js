@@ -1,10 +1,3 @@
-export const getMovies = async (query, page) => {
-  let data = await fetch(
-    `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&language=en-EN&query=${query}&page=${page}&include_adult=false`,
-  );
-  return data.json();
-};
-
 export const movieDetailApi = async (movieId) => {
   let data = await fetch(
     `https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}&language=en-US`,
